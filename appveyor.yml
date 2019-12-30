@@ -1,0 +1,17 @@
+version: 1.0.0.{build}
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+build_script:
+- ps: msbuild /t:restore,pack /p:Configuration=Release /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /verbosity:minimal
+test_script:
+- ps: dotnet test tests\NLog.DiagnosticSource.Tests\NLog.DiagnosticSource.Tests.csproj
+artifacts:
+  - path: '**\NLog.*.nupkg'
+  - path: '**\NLog.*.snupkg'
+deploy:
+- provider: NuGet
+  api_key:
+    secure: DtVDH1ZfIR8E2oDLeSPxfn0WFXw3MCv4WhLkkQQl9LfEHswb5sdxdCYodNKhrKik
+  on:
+    branch: master
