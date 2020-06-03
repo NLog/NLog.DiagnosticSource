@@ -4,7 +4,7 @@ NLog DiagnosticListenerTarget for [Microsoft DiagnosticSource](https://github.co
 NLog ActivityTraceLayoutRenderer for [Microsoft Activity Trace](https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.DiagnosticSource/src/ActivityUserGuide.md)
 
 [![Version](https://badge.fury.io/nu/NLog.DiagnosticSource.svg)](https://www.nuget.org/packages/NLog.DiagnosticSource)
-[![AppVeyor](https://img.shields.io/appveyor/ci/nlog/NLog.DiagnosticSource/master.svg)](https://ci.appveyor.com/project/nlog/NLog.DiagnosticSource/branch/master)
+[![AppVeyor](https://img.shields.io/appveyor/ci/nlog/NLog-DiagnosticSource/master.svg)](https://ci.appveyor.com/project/nlog/NLog-DiagnosticSource/branch/master)
 
 ### How to install
 
