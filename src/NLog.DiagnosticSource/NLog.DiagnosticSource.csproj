@@ -14,19 +14,21 @@
 
     <Title>NLog.DiagnosticSource</Title>
     <Company>NLog</Company>
-    <Description>NLog Integration for Microsoft System.Diagnostics.DiagnosticSource and Activity </Description>
+    <Description>NLog Integration for Microsoft's System.Diagnostics.DiagnosticSource and Activity</Description>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/NLog/NLog.DiagnosticSource.git</RepositoryUrl>
     <PackageTags>DiagnosticSource;NLog;logging;log</PackageTags>
     <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/NLog/NLog.DiagnosticSourcer</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/NLog/NLog.DiagnosticSource/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageReleaseNotes>
     </PackageReleaseNotes>
 
     <IsPackable>true</IsPackable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Authors>NLog</Authors>
+    <Copyright>NLog</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
