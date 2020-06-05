@@ -27,6 +27,9 @@
     <IsPackable>true</IsPackable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>NLog.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
 
   <ItemGroup>
