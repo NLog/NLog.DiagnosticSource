@@ -57,5 +57,25 @@
         /// <see cref="System.Diagnostics.ActivityTraceFlags"/> for activity (defined by the W3C ID specification) 
         /// </summary>
         ActivityTraceFlags,
+        /// <summary>
+        /// Collection of <see cref="System.Diagnostics.ActivityEvent"/> events attached to this activity
+        /// </summary>
+        Events,
+        /// <summary>
+        /// Custom property object value
+        /// </summary>
+        CustomProperty,
+        /// <summary>
+        /// Name of the activity source associated with this activity
+        /// </summary>
+        SourceName,
+        /// <summary>
+        /// Version of the activity source associated with this activity
+        /// </summary>
+        SourceVersion,
+        /// <summary>
+        /// Relationship kind between the activity, its parents, and its children
+        /// </summary>
+        ActivityKind,
     }
 }

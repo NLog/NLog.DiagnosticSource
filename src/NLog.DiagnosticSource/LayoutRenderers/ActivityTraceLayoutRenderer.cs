@@ -21,7 +21,7 @@ namespace NLog.LayoutRenderers
         public ActivityTraceProperty Property { get; set; } = ActivityTraceProperty.Id;
 
         /// <summary>
-        /// Single item to extract from <see cref="System.Diagnostics.Activity.Baggage"/> or <see cref="System.Diagnostics.Activity.Tags"/>
+        /// Single item to extract from <see cref="System.Diagnostics.Activity.Baggage"/> or <see cref="System.Diagnostics.Activity.Tags"/> or with <see cref="System.Diagnostics.Activity.GetCustomProperty(string)"/>
         /// </summary>
         public string Item { get; set; }
 
@@ -37,16 +37,37 @@ namespace NLog.LayoutRenderers
             if (activity == null)
                 return;
 
-            if ((Property == ActivityTraceProperty.Baggage || Property == ActivityTraceProperty.Tags) && string.IsNullOrEmpty(Item))
+            if (Property == ActivityTraceProperty.Baggage && string.IsNullOrEmpty(Item))
             {
-                var collection = Property == ActivityTraceProperty.Baggage ? activity.Baggage : activity.Tags;
                 if (Format == "@")
                 {
-                    RenderStringDictionaryJson(collection, builder);
+                    RenderStringDictionaryJson(activity.Baggage, builder);
                 }
                 else
                 {
-                    RenderStringDictionaryFlat(collection, builder);
+                    RenderStringDictionaryFlat(activity.Baggage, builder);
+                }
+            }
+            else if (Property == ActivityTraceProperty.Tags && string.IsNullOrEmpty(Item))
+            {
+                if (Format == "@")
+                {
+                    RenderStringDictionaryJson(activity.TagObjects, builder);
+                }
+                else
+                {
+                    RenderStringDictionaryFlat(activity.TagObjects, builder);
+                }
+            }
+            else if (Property == ActivityTraceProperty.Events)
+            {
+                if (Format == "@")
+                {
+                    RenderActivityEventsJson(builder, activity.Events);
+                }
+                else
+                {
+                    RenderActivityEventsFlat(builder, activity.Events);
                 }
             }
             else
@@ -72,51 +93,153 @@ namespace NLog.LayoutRenderers
                 case ActivityTraceProperty.TraceState: return activity.TraceStateString;
                 case ActivityTraceProperty.ActivityTraceFlags: return activity.ActivityTraceFlags == System.Diagnostics.ActivityTraceFlags.None && string.IsNullOrEmpty(Format) ? string.Empty : activity.ActivityTraceFlags.ToString(Format);
                 case ActivityTraceProperty.Baggage: return GetCollectionItem(Item, activity.Baggage);
-                case ActivityTraceProperty.Tags: return GetCollectionItem(Item, activity.Tags);
+                case ActivityTraceProperty.Tags: return GetCollectionItem(Item, activity.TagObjects);
+                case ActivityTraceProperty.CustomProperty: return string.IsNullOrEmpty(Item) ? string.Empty : (activity.GetCustomProperty(Item)?.ToString() ?? string.Empty);
+                case ActivityTraceProperty.SourceName: return activity.Source?.Name;
+                case ActivityTraceProperty.SourceVersion: return activity.Source?.Version;
+                case ActivityTraceProperty.ActivityKind: return ConvertToString(activity.Kind);
                 default: return string.Empty;
             }
         }
 
-        private static void RenderStringDictionaryFlat(IEnumerable<KeyValuePair<string, string>> collection, StringBuilder builder)
+        private static string GetCollectionItem<T>(string item, IEnumerable<KeyValuePair<string, T>> collection) where T : class
         {
+            if (collection is ICollection<KeyValuePair<string, T>> emptyCollection && emptyCollection.Count == 0)
+                return string.Empty; // Skip allocation of enumerator
+
+            foreach (var keyValue in collection)
+            {
+                if (string.CompareOrdinal(keyValue.Key, item)==0)
+                {
+                    return ConvertToString(keyValue.Value);
+                }
+            }
+
+            return string.Empty;    // Not found
+        }
+
+        private static void RenderStringDictionaryFlat<T>(IEnumerable<KeyValuePair<string, T>> collection, StringBuilder builder) where T : class
+        {
+            if (collection is ICollection<KeyValuePair<string, T>> emptyCollection && emptyCollection.Count == 0)
+                return; // Skip allocation of enumerator
+
             var firstItem = true;
             foreach (var keyValue in collection)
             {
                 if (!firstItem)
-                    builder.Append(",");
+                    builder.Append(',');
                 firstItem = false;
                 builder.Append(keyValue.Key);
-                builder.Append("=");
-                builder.Append(keyValue.Value);
+
+                string stringValue = ConvertToString(keyValue.Value);
+                if (stringValue != null)
+                {
+                    builder.Append('=');
+                    builder.Append(stringValue);
+                }
             }
         }
 
-        private static void RenderStringDictionaryJson(IEnumerable<KeyValuePair<string, string>> collection, StringBuilder builder)
+        private static void RenderStringDictionaryJson<T>(IEnumerable<KeyValuePair<string, T>> collection, StringBuilder builder, string dictionaryPrefix = "{ ") where T : class
         {
+            if (collection is ICollection<KeyValuePair<string, T>> emptyCollection && emptyCollection.Count == 0)
+                return; // Skip allocation of enumerator
+
             var firstItem = true;
             foreach (var keyValue in collection)
             {
+                if (string.IsNullOrWhiteSpace(keyValue.Key))
+                    continue;
+
                 if (firstItem)
-                    builder.Append("{ ");
+                    builder.Append(dictionaryPrefix);
                 else
                     builder.Append(", ");
                 firstItem = false;
-                builder.Append("\"");
+                builder.Append('"');
                 builder.Append(keyValue.Key);
-                builder.Append("\": \"");
-                builder.Append(keyValue.Value);
-                builder.Append("\"");
+
+                string stringValue = ConvertToString(keyValue.Value);
+                if (stringValue == null)
+                    builder.Append("\": null");
+                else
+                    builder.Append("\": \"").Append(stringValue).Append('"');
             }
+
             if (!firstItem)
                 builder.Append(" }");
         }
 
-        private static string GetCollectionItem(string item, IEnumerable<KeyValuePair<string,string>> collection)
+        private static void RenderActivityEventsFlat(StringBuilder builder, IEnumerable<System.Diagnostics.ActivityEvent> activityEvents)
         {
-            foreach (var keyValue in collection)
-                if (item.Equals(keyValue.Key, StringComparison.OrdinalIgnoreCase))
-                    return keyValue.Value;
-            return string.Empty;
+            if (activityEvents is ICollection<System.Diagnostics.ActivityEvent> emptyCollection && emptyCollection.Count == 0)
+                return; // Skip allocation of enumerator
+
+            var firstItem = true;
+            foreach (var item in activityEvents)
+            {
+                if (!firstItem)
+                    builder.Append(", ");
+                builder.Append(item.Name);
+                firstItem = false;
+            }
+        }
+
+        private static void RenderActivityEventsJson(StringBuilder builder, IEnumerable<System.Diagnostics.ActivityEvent> activityEvents)
+        {
+            if (activityEvents is ICollection<System.Diagnostics.ActivityEvent> emptyCollection && emptyCollection.Count == 0)
+                return; // Skip allocation of enumerator
+
+            var firstItem = true;
+            foreach (var item in activityEvents)
+            {
+                if (string.IsNullOrWhiteSpace(item.Name))
+                    continue;
+
+                if (firstItem)
+                    builder.Append("[ ");
+                else
+                    builder.Append(", ");
+
+                firstItem = false;
+                builder.Append("{ \"name\": \"");
+                builder.Append(item.Name);
+                builder.Append("\", \"timestamp\": \"");
+                builder.Append(item.Timestamp.ToString("yyyy-MM-dd HH:mm:ss zzz", System.Globalization.CultureInfo.InvariantCulture));
+                RenderStringDictionaryJson(item.Tags, builder, ", \"tags\"={ ");
+                builder.Append("\" }");
+            }
+
+            if (!firstItem)
+                builder.Append(" ]");
+        }
+
+        private static string ConvertToString(System.Diagnostics.ActivityKind activityKind)
+        {
+            switch (activityKind)
+            {
+                case System.Diagnostics.ActivityKind.Internal: return string.Empty; // unassigned so not interesting
+                case System.Diagnostics.ActivityKind.Server: return nameof(System.Diagnostics.ActivityKind.Server);
+                case System.Diagnostics.ActivityKind.Client: return nameof(System.Diagnostics.ActivityKind.Client);
+                case System.Diagnostics.ActivityKind.Producer: return nameof(System.Diagnostics.ActivityKind.Producer);
+                case System.Diagnostics.ActivityKind.Consumer: return nameof(System.Diagnostics.ActivityKind.Consumer);
+                default: return activityKind.ToString();
+            }
+        }
+
+        private static string ConvertToString(object objectValue)
+        {
+            try
+            {
+                if (objectValue == null)
+                    return null;
+
+                return Convert.ToString(objectValue, System.Globalization.CultureInfo.InvariantCulture);
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         private string CoalesceTraceId(string traceId)

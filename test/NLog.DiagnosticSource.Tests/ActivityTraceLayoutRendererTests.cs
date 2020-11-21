@@ -45,6 +45,11 @@ namespace NLog.DiagnosticSource.Tests
         [InlineData(ActivityTraceProperty.RootId, false)]       // Will fallback to Id
         [InlineData(ActivityTraceProperty.TraceState, true)]
         [InlineData(ActivityTraceProperty.ActivityTraceFlags, true)]
+        [InlineData(ActivityTraceProperty.Events, true)]
+        [InlineData(ActivityTraceProperty.CustomProperty, true)]
+        [InlineData(ActivityTraceProperty.SourceName, true)]
+        [InlineData(ActivityTraceProperty.SourceVersion, true)]
+        [InlineData(ActivityTraceProperty.ActivityKind, true)]
         public void TestAllPropertiesWhenActivityEmpty(ActivityTraceProperty property, bool empty)
         {
             bool orgThrowExceptions = LogManager.ThrowExceptions;
@@ -81,6 +86,11 @@ namespace NLog.DiagnosticSource.Tests
         [InlineData(ActivityTraceProperty.RootId, null, null)]       // Will fallback to Id
         [InlineData(ActivityTraceProperty.TraceState, null, "")]
         [InlineData(ActivityTraceProperty.ActivityTraceFlags, null, "")]
+        [InlineData(ActivityTraceProperty.Events, null, "")]
+        [InlineData(ActivityTraceProperty.CustomProperty, null, "")]
+        [InlineData(ActivityTraceProperty.SourceName, null, "")]
+        [InlineData(ActivityTraceProperty.SourceVersion, null, "")]
+        [InlineData(ActivityTraceProperty.ActivityKind, null, "")]
         public void TestAllPropertiesWhenActivityRunning(ActivityTraceProperty property, string format, string output)
         {
             bool orgThrowExceptions = LogManager.ThrowExceptions;
@@ -225,6 +235,57 @@ namespace NLog.DiagnosticSource.Tests
             var jsonElement = (System.Text.Json.JsonElement)System.Text.Json.JsonSerializer.Deserialize(result, typeof(object));
             Assert.Equal("myvalue1", jsonElement.GetProperty("myitem1").GetString());
             Assert.Equal("myvalue2", jsonElement.GetProperty("myitem2").GetString());
+        }
+
+        [Fact]
+        public void TestEventsSingleItem()
+        {
+            // Arrange
+            var logEvent = LogEventInfo.CreateNullEvent();
+            ActivityTraceLayoutRenderer layoutRenderer = new ActivityTraceLayoutRenderer();
+            layoutRenderer.Property = ActivityTraceProperty.Events;
+
+            // Act
+            System.Diagnostics.Activity.Current = new System.Diagnostics.Activity("MyOperation").Start().AddEvent(new System.Diagnostics.ActivityEvent("myevent1"));
+            var result = layoutRenderer.Render(logEvent);
+
+            // Assert
+            Assert.Equal("myevent1", result);
+        }
+
+        [Fact]
+        public void TestEventsDoubleItem()
+        {
+            // Arrange
+            var logEvent = LogEventInfo.CreateNullEvent();
+            ActivityTraceLayoutRenderer layoutRenderer = new ActivityTraceLayoutRenderer();
+            layoutRenderer.Property = ActivityTraceProperty.Events;
+
+            // Act
+            System.Diagnostics.Activity.Current = new System.Diagnostics.Activity("MyOperation").Start().AddEvent(new System.Diagnostics.ActivityEvent("myevent1")).AddEvent(new System.Diagnostics.ActivityEvent("myevent2"));
+            var result = layoutRenderer.Render(logEvent);
+
+            // Assert
+            Assert.Contains("myevent1, myevent2", result);
+        }
+
+        [Fact]
+        public void TestEventsDoubleItemJson()
+        {
+            // Arrange
+            var logEvent = LogEventInfo.CreateNullEvent();
+            ActivityTraceLayoutRenderer layoutRenderer = new ActivityTraceLayoutRenderer();
+            layoutRenderer.Property = ActivityTraceProperty.Events;
+            layoutRenderer.Format = "@";
+
+            // Act
+            System.Diagnostics.Activity.Current = new System.Diagnostics.Activity("MyOperation").Start().AddEvent(new System.Diagnostics.ActivityEvent("myevent1")).AddEvent(new System.Diagnostics.ActivityEvent("myevent2"));
+            var result = layoutRenderer.Render(logEvent);
+
+            var jsonElement = (System.Text.Json.JsonElement[])System.Text.Json.JsonSerializer.Deserialize(result, typeof(System.Text.Json.JsonElement[]));
+            Assert.Equal(2, jsonElement.Length);
+            Assert.Equal("myevent1", jsonElement[0].GetProperty("name").GetString());
+            Assert.Equal("myevent2", jsonElement[1].GetProperty("name").GetString());
         }
     }
 }
