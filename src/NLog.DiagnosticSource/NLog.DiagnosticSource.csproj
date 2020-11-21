@@ -18,9 +18,9 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/NLog/NLog.DiagnosticSource.git</RepositoryUrl>
     <PackageTags>DiagnosticSource;NLog;logging;log</PackageTags>
-    <PackageIconUrl>https://nlog-project.org/N.png</PackageIconUrl>
+    <PackageIcon>N.png</PackageIcon>
     <PackageProjectUrl>https://github.com/NLog/NLog.DiagnosticSourcer</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/NLog/NLog.DiagnosticSource/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageReleaseNotes>
     </PackageReleaseNotes>
 
@@ -30,7 +30,16 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>NLog.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
+    
   </PropertyGroup>
+
+  <Target Name="DownloadMissingContent" BeforeTargets="GenerateNuspec">
+    <DownloadFile SourceUrl="https://nlog-project.org/N.png" DestinationFolder="$(MSBuildThisFileDirectory)" />
+  </Target>
+
+  <ItemGroup>
+    <None Include="N.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.5.11" />
