@@ -33,18 +33,16 @@ namespace NLog.DiagnosticSource.Tests
         }
 
         [Theory]
-        [InlineData(ActivityTraceProperty.Id, false)]           // Id will never be empty
-        [InlineData(ActivityTraceProperty.TraceId, true)]
+        [InlineData(ActivityTraceProperty.SpanId, false)]           // SpanId will never be empty
+        [InlineData(ActivityTraceProperty.TraceId, false)]          // Will fallback to SpanId
         [InlineData(ActivityTraceProperty.OperationName, true)]
         [InlineData(ActivityTraceProperty.StartTimeUtc, true)]
         [InlineData(ActivityTraceProperty.Duration, true)]
         [InlineData(ActivityTraceProperty.Baggage, true)]
         [InlineData(ActivityTraceProperty.Tags, true)]
         [InlineData(ActivityTraceProperty.ParentId, true)]
-        [InlineData(ActivityTraceProperty.ParentSpanId, true)]
-        [InlineData(ActivityTraceProperty.RootId, false)]       // Will fallback to Id
         [InlineData(ActivityTraceProperty.TraceState, true)]
-        [InlineData(ActivityTraceProperty.ActivityTraceFlags, true)]
+        [InlineData(ActivityTraceProperty.TraceFlags, true)]
         [InlineData(ActivityTraceProperty.Events, true)]
         [InlineData(ActivityTraceProperty.CustomProperty, true)]
         [InlineData(ActivityTraceProperty.SourceName, true)]
@@ -74,18 +72,16 @@ namespace NLog.DiagnosticSource.Tests
         }
 
         [Theory]
-        [InlineData(ActivityTraceProperty.Id, null, null)]        // Id will never be empty
-        [InlineData(ActivityTraceProperty.TraceId, null, "")]
+        [InlineData(ActivityTraceProperty.SpanId, null, null)]        // SpanId will never be empty
+        [InlineData(ActivityTraceProperty.TraceId, null, null)]       // Will fallback to SpanId
         [InlineData(ActivityTraceProperty.OperationName, null, "MyOperation")]
         [InlineData(ActivityTraceProperty.StartTimeUtc, "u", "0001-01-01 00:00:00Z")]
         [InlineData(ActivityTraceProperty.Duration, null, "00:00:00")]
         [InlineData(ActivityTraceProperty.Baggage, null, "")]
         [InlineData(ActivityTraceProperty.Tags, null, "")]
         [InlineData(ActivityTraceProperty.ParentId, null, "")]
-        [InlineData(ActivityTraceProperty.ParentSpanId, null, "")]
-        [InlineData(ActivityTraceProperty.RootId, null, null)]       // Will fallback to Id
         [InlineData(ActivityTraceProperty.TraceState, null, "")]
-        [InlineData(ActivityTraceProperty.ActivityTraceFlags, null, "")]
+        [InlineData(ActivityTraceProperty.TraceFlags, null, "")]
         [InlineData(ActivityTraceProperty.Events, null, "")]
         [InlineData(ActivityTraceProperty.CustomProperty, null, "")]
         [InlineData(ActivityTraceProperty.SourceName, null, "")]

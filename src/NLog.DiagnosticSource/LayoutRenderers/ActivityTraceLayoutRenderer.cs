@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using NLog.Config;
+using NLog.Extensions.Logging;
 
 namespace NLog.LayoutRenderers
 {
@@ -12,13 +13,10 @@ namespace NLog.LayoutRenderers
     [ThreadSafe]
     public sealed class ActivityTraceLayoutRenderer : LayoutRenderer
     {
-        private static readonly string EmptySpanId = default(System.Diagnostics.ActivitySpanId).ToString();
-        private static readonly string EmptyTraceId = default(System.Diagnostics.ActivityTraceId).ToString();
-
         /// <summary>
         /// Gets or sets the property to retrieve.
         /// </summary>
-        public ActivityTraceProperty Property { get; set; } = ActivityTraceProperty.Id;
+        public ActivityTraceProperty Property { get; set; } = ActivityTraceProperty.SpanId;
 
         /// <summary>
         /// Single item to extract from <see cref="System.Diagnostics.Activity.Baggage"/> or <see cref="System.Diagnostics.Activity.Tags"/> or with <see cref="System.Diagnostics.Activity.GetCustomProperty(string)"/>
@@ -81,17 +79,14 @@ namespace NLog.LayoutRenderers
         {
             switch (Property)
             {
-                case ActivityTraceProperty.Id: return activity.Id;
-                case ActivityTraceProperty.TraceId: return CoalesceTraceId(activity.TraceId.ToString());
-                case ActivityTraceProperty.SpanId: return CoalesceSpanId(activity.SpanId.ToString());
+                case ActivityTraceProperty.SpanId: return activity.GetSpanId();
+                case ActivityTraceProperty.TraceId: return activity.GetTraceId();
                 case ActivityTraceProperty.OperationName: return activity.OperationName;
                 case ActivityTraceProperty.StartTimeUtc:return activity.StartTimeUtc > DateTime.MinValue ? activity.StartTimeUtc.ToString(Format) : string.Empty;
                 case ActivityTraceProperty.Duration: return activity.StartTimeUtc > DateTime.MinValue ? activity.Duration.ToString(Format) : string.Empty;
-                case ActivityTraceProperty.ParentId: return activity.ParentId;
-                case ActivityTraceProperty.ParentSpanId: return CoalesceSpanId(activity.ParentSpanId.ToString());
-                case ActivityTraceProperty.RootId: return activity.RootId;
+                case ActivityTraceProperty.ParentId: return activity.GetParentId();
                 case ActivityTraceProperty.TraceState: return activity.TraceStateString;
-                case ActivityTraceProperty.ActivityTraceFlags: return activity.ActivityTraceFlags == System.Diagnostics.ActivityTraceFlags.None && string.IsNullOrEmpty(Format) ? string.Empty : activity.ActivityTraceFlags.ToString(Format);
+                case ActivityTraceProperty.TraceFlags: return activity.ActivityTraceFlags == System.Diagnostics.ActivityTraceFlags.None && string.IsNullOrEmpty(Format) ? string.Empty : activity.ActivityTraceFlags.ToString(Format);
                 case ActivityTraceProperty.Baggage: return GetCollectionItem(Item, activity.Baggage);
                 case ActivityTraceProperty.Tags: return GetCollectionItem(Item, activity.TagObjects);
                 case ActivityTraceProperty.CustomProperty: return string.IsNullOrEmpty(Item) ? string.Empty : (activity.GetCustomProperty(Item)?.ToString() ?? string.Empty);
@@ -240,22 +235,6 @@ namespace NLog.LayoutRenderers
             {
                 return string.Empty;
             }
-        }
-
-        private string CoalesceTraceId(string traceId)
-        {
-            if (EmptyTraceId == traceId)
-                return string.Empty;
-            else
-                return traceId;
-        }
-
-        private string CoalesceSpanId(string spanId)
-        {
-            if (EmptySpanId == spanId)
-                return string.Empty;
-            else
-                return spanId;
         }
     }
 }

@@ -8,15 +8,11 @@
         /// <summary>
         /// Identifier that is specific to a particular request.
         /// </summary>
-        Id,
+        SpanId,
         /// <summary>
-        /// TraceId part of the <see cref="Id"/>
+        /// TraceId part of the current <see cref="SpanId"/>
         /// </summary>
         TraceId,
-        /// <summary>
-        /// SPAN part of the <see cref="Id"/>
-        /// </summary>
-        SpanId,
         /// <summary>
         /// Operation name.
         /// </summary>
@@ -42,21 +38,13 @@
         /// </summary>
         ParentId,
         /// <summary>
-        /// Activity's Parent SpanID.
-        /// </summary>
-        ParentSpanId,
-        /// <summary>
-        /// Root ID of this Activity.
-        /// </summary>
-        RootId,
-        /// <summary>
         /// W3C tracestate header.
         /// </summary>
         TraceState,
         /// <summary>
         /// <see cref="System.Diagnostics.ActivityTraceFlags"/> for activity (defined by the W3C ID specification) 
         /// </summary>
-        ActivityTraceFlags,
+        TraceFlags,
         /// <summary>
         /// Collection of <see cref="System.Diagnostics.ActivityEvent"/> events attached to this activity
         /// </summary>
