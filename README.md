@@ -56,7 +56,7 @@ Use the layout "${activity}" in your nlog.config
 </rules>
 ```
 
-** Property Values **
+**Property Values**
 - SpanId : Identifier for the current activity
 - TraceId : Identifier for the root activity
 - ParentId : Identifier for the parent activity
