@@ -16,6 +16,7 @@ namespace NLog.LayoutRenderers
         /// <summary>
         /// Gets or sets the property to retrieve.
         /// </summary>
+        [DefaultParameter]
         public ActivityTraceProperty Property { get; set; } = ActivityTraceProperty.SpanId;
 
         /// <summary>
