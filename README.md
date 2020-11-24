@@ -49,14 +49,14 @@ Use the layout "${activity}" in your nlog.config
     <add assembly="NLog.DiagnosticSource"/>
 </extensions>
 <targets>
-    <target name="console" xsi:type="console" layout="${message}|ActivityId=${activity:property=Id}" />
+    <target name="console" xsi:type="console" layout="${message}|ActivityId=${activity:property=TraceId}" />
 </targets>
 <rules>
     <logger minLevel="Info" writeTo="console" />
 </rules>
 ```
 
-The follow property values can be used:
+** Property Values **
 - SpanId : Identifier for the current activity
 - TraceId : Identifier for the root activity
 - ParentId : Identifier for the parent activity
