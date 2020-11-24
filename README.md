@@ -57,21 +57,18 @@ Use the layout "${activity}" in your nlog.config
 ```
 
 The follow property values can be used:
-- Id : Identifier that is specific to a particular request.
-- TraceId : TraceId part of the Id
-- SpanId : SPAN part of the Id
-- OperationName : Operation name
+- SpanId : Identifier for the current activity
+- TraceId : Identifier for the root activity
+- ParentId : Identifier for the parent activity
+- OperationName : Operation name of the current activity
 - StartTimeUtc : Time when the operation started
 - Duration : Duration of the operation
 - Baggage : Collection of key/value pairs that are passed to children of this Activity
 - Tags : Collection of key/value pairs that are NOT passed to children of this Activity
 - Events : Events attached to this activity
 - CustomProperty : Custom property assigned to this activity. Must be used together with Item-option
-- ParentId : Activity's Parent ID
-- ParentSpanId : Activity's Parent SpanID
-- RootId : Root ID of this Activity
 - TraceState : W3C tracestate header
-- ActivityTraceFlags : See System.Diagnostics.ActivityTraceFlags for activity (defined by the W3C ID specification) 
+- TraceFlags : See System.Diagnostics.ActivityTraceFlags for activity (defined by the W3C ID specification) 
 - SourceName : Name of the activity source associated with this activity
 - SourceVersion : Version of the activity source associated with this activity
 - ActivityKind : Relationship kind between the activity, its parents, and its children
