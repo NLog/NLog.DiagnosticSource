@@ -30,18 +30,6 @@
         /// </summary>
         Duration,
         /// <summary>
-        /// Parent Operation name.
-        /// </summary>
-        ParentOperationName,
-        /// <summary>
-        /// Parent Operation start time.
-        /// </summary>
-        ParentStartTimeUtc,
-        /// <summary>
-        /// Parent Operation duration.
-        /// </summary>
-        ParentDuration,
-        /// <summary>
         /// Collection of key/value pairs that are passed to children of this Activity.
         /// </summary>
         Baggage,

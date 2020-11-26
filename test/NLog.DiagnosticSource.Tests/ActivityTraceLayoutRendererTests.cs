@@ -36,11 +36,8 @@ namespace NLog.DiagnosticSource.Tests
         [InlineData(ActivityTraceProperty.SpanId, false)]           // SpanId will never be empty
         [InlineData(ActivityTraceProperty.TraceId, false)]          // Will fallback to SpanId
         [InlineData(ActivityTraceProperty.OperationName, true)]
-        [InlineData(ActivityTraceProperty.ParentOperationName, true)]
         [InlineData(ActivityTraceProperty.StartTimeUtc, true)]
-        [InlineData(ActivityTraceProperty.ParentStartTimeUtc, true)]
         [InlineData(ActivityTraceProperty.Duration, true)]
-        [InlineData(ActivityTraceProperty.ParentDuration, true)]
         [InlineData(ActivityTraceProperty.Baggage, true)]
         [InlineData(ActivityTraceProperty.Tags, true)]
         [InlineData(ActivityTraceProperty.ParentId, true)]
@@ -78,11 +75,8 @@ namespace NLog.DiagnosticSource.Tests
         [InlineData(ActivityTraceProperty.SpanId, null, null)]        // SpanId will never be empty
         [InlineData(ActivityTraceProperty.TraceId, null, null)]       // Will fallback to SpanId
         [InlineData(ActivityTraceProperty.OperationName, null, "MyOperation")]
-        [InlineData(ActivityTraceProperty.ParentOperationName, null, "")]
         [InlineData(ActivityTraceProperty.StartTimeUtc, "u", "0001-01-01 00:00:00Z")]
-        [InlineData(ActivityTraceProperty.ParentStartTimeUtc, "u", "0001-01-01 00:00:00Z")]
         [InlineData(ActivityTraceProperty.Duration, null, "00:00:00")]
-        [InlineData(ActivityTraceProperty.ParentDuration, null, "00:00:00")]
         [InlineData(ActivityTraceProperty.Baggage, null, "")]
         [InlineData(ActivityTraceProperty.Tags, null, "")]
         [InlineData(ActivityTraceProperty.ParentId, null, "")]

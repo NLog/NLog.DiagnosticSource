@@ -29,10 +29,18 @@ namespace NLog.LayoutRenderers
         /// </summary>
         public string Format { get; set; }
 
+        /// <summary>
+        /// Retrieve the value from the parent activity
+        /// </summary>
+        public bool Parent { get; set; }
+
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var activity = System.Diagnostics.Activity.Current;
+            if (Parent)
+                activity = activity?.Parent;
+
             if (activity == null)
                 return;
 
@@ -83,11 +91,8 @@ namespace NLog.LayoutRenderers
                 case ActivityTraceProperty.SpanId: return activity.GetSpanId();
                 case ActivityTraceProperty.TraceId: return activity.GetTraceId();
                 case ActivityTraceProperty.OperationName: return activity.OperationName;
-                case ActivityTraceProperty.ParentOperationName: return activity.Parent?.OperationName;
-                case ActivityTraceProperty.StartTimeUtc:return FormatStartTimeUtc(activity, Format);
-                case ActivityTraceProperty.ParentStartTimeUtc: return FormatStartTimeUtc(activity.Parent ?? activity, Format);
-                case ActivityTraceProperty.Duration: return FormatDuration(activity, Format);
-                case ActivityTraceProperty.ParentDuration: return FormatDuration(activity.Parent ?? activity, Format);
+                case ActivityTraceProperty.StartTimeUtc:return activity.StartTimeUtc > DateTime.MinValue ? activity.StartTimeUtc.ToString(Format) : string.Empty;
+                case ActivityTraceProperty.Duration: return activity.StartTimeUtc > DateTime.MinValue ? activity.Duration.ToString(Format) : string.Empty;
                 case ActivityTraceProperty.ParentId: return activity.GetParentId();
                 case ActivityTraceProperty.TraceState: return activity.TraceStateString;
                 case ActivityTraceProperty.TraceFlags: return activity.ActivityTraceFlags == System.Diagnostics.ActivityTraceFlags.None && string.IsNullOrEmpty(Format) ? string.Empty : activity.ActivityTraceFlags.ToString(Format);
@@ -239,16 +244,6 @@ namespace NLog.LayoutRenderers
             {
                 return string.Empty;
             }
-        }
-
-        private static string FormatStartTimeUtc(System.Diagnostics.Activity activity, string format)
-        {
-            return activity.StartTimeUtc > DateTime.MinValue ? activity.StartTimeUtc.ToString(format) : string.Empty;
-        }
-
-        private static string FormatDuration(System.Diagnostics.Activity activity, string format)
-        {
-            return activity.StartTimeUtc > DateTime.MinValue ? activity.Duration.ToString(format) : string.Empty;
         }
     }
 }
