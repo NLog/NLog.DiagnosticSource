@@ -6,11 +6,15 @@
     public enum ActivityTraceProperty
     {
         /// <summary>
-        /// Identifier that is specific to a particular request.
+        /// Identifier for the current activity
         /// </summary>
         SpanId,
         /// <summary>
-        /// TraceId part of the current <see cref="SpanId"/>
+        /// Identifier for the parent activity
+        /// </summary>
+        ParentId,
+        /// <summary>
+        /// Identifier for the root activity
         /// </summary>
         TraceId,
         /// <summary>
@@ -26,6 +30,18 @@
         /// </summary>
         Duration,
         /// <summary>
+        /// Parent Operation name.
+        /// </summary>
+        ParentOperationName,
+        /// <summary>
+        /// Parent Operation start time.
+        /// </summary>
+        ParentStartTimeUtc,
+        /// <summary>
+        /// Parent Operation duration.
+        /// </summary>
+        ParentDuration,
+        /// <summary>
         /// Collection of key/value pairs that are passed to children of this Activity.
         /// </summary>
         Baggage,
@@ -33,10 +49,6 @@
         /// Collection of key/value pairs that are NOT passed to children of this Activity
         /// </summary>
         Tags,
-        /// <summary>
-        /// Activity's Parent ID.
-        /// </summary>
-        ParentId,
         /// <summary>
         /// W3C tracestate header.
         /// </summary>

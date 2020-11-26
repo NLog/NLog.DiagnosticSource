@@ -83,14 +83,17 @@ namespace NLog.LayoutRenderers
                 case ActivityTraceProperty.SpanId: return activity.GetSpanId();
                 case ActivityTraceProperty.TraceId: return activity.GetTraceId();
                 case ActivityTraceProperty.OperationName: return activity.OperationName;
-                case ActivityTraceProperty.StartTimeUtc:return activity.StartTimeUtc > DateTime.MinValue ? activity.StartTimeUtc.ToString(Format) : string.Empty;
-                case ActivityTraceProperty.Duration: return activity.StartTimeUtc > DateTime.MinValue ? activity.Duration.ToString(Format) : string.Empty;
+                case ActivityTraceProperty.ParentOperationName: return activity.Parent?.OperationName;
+                case ActivityTraceProperty.StartTimeUtc:return FormatStartTimeUtc(activity, Format);
+                case ActivityTraceProperty.ParentStartTimeUtc: return FormatStartTimeUtc(activity.Parent ?? activity, Format);
+                case ActivityTraceProperty.Duration: return FormatDuration(activity, Format);
+                case ActivityTraceProperty.ParentDuration: return FormatDuration(activity.Parent ?? activity, Format);
                 case ActivityTraceProperty.ParentId: return activity.GetParentId();
                 case ActivityTraceProperty.TraceState: return activity.TraceStateString;
                 case ActivityTraceProperty.TraceFlags: return activity.ActivityTraceFlags == System.Diagnostics.ActivityTraceFlags.None && string.IsNullOrEmpty(Format) ? string.Empty : activity.ActivityTraceFlags.ToString(Format);
                 case ActivityTraceProperty.Baggage: return GetCollectionItem(Item, activity.Baggage);
                 case ActivityTraceProperty.Tags: return GetCollectionItem(Item, activity.TagObjects);
-                case ActivityTraceProperty.CustomProperty: return string.IsNullOrEmpty(Item) ? string.Empty : (activity.GetCustomProperty(Item)?.ToString() ?? string.Empty);
+                case ActivityTraceProperty.CustomProperty: return string.IsNullOrEmpty(Item) ? string.Empty : (activity.GetCustomProperty(Item)?.ToString() ?? activity.Parent?.GetCustomProperty(Item)?.ToString() ?? string.Empty);
                 case ActivityTraceProperty.SourceName: return activity.Source?.Name;
                 case ActivityTraceProperty.SourceVersion: return activity.Source?.Version;
                 case ActivityTraceProperty.ActivityKind: return ConvertToString(activity.Kind);
@@ -236,6 +239,16 @@ namespace NLog.LayoutRenderers
             {
                 return string.Empty;
             }
+        }
+
+        private static string FormatStartTimeUtc(System.Diagnostics.Activity activity, string format)
+        {
+            return activity.StartTimeUtc > DateTime.MinValue ? activity.StartTimeUtc.ToString(format) : string.Empty;
+        }
+
+        private static string FormatDuration(System.Diagnostics.Activity activity, string format)
+        {
+            return activity.StartTimeUtc > DateTime.MinValue ? activity.Duration.ToString(format) : string.Empty;
         }
     }
 }

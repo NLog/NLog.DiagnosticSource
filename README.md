@@ -58,11 +58,14 @@ Use the layout "${activity}" in your nlog.config
 
 **Property Values**
 - SpanId : Identifier for the current activity
-- TraceId : Identifier for the root activity
 - ParentId : Identifier for the parent activity
+- TraceId : Identifier for the root activity
 - OperationName : Operation name of the current activity
 - StartTimeUtc : Time when the operation started
 - Duration : Duration of the operation
+- ParentOperationName : Operation name of the parent activity
+- ParentStartTimeUtc : Time when the parent operation started (Fallback to current activity if no parent)
+- ParentDuration : Duration of the parent operation (Fallback to current activity if no parent)
 - Baggage : Collection of key/value pairs that are passed to children of this Activity
 - Tags : Collection of key/value pairs that are NOT passed to children of this Activity
 - Events : Events attached to this activity
