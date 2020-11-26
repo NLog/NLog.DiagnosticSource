@@ -34,12 +34,29 @@ namespace NLog.LayoutRenderers
         /// </summary>
         public bool Parent { get; set; }
 
+        /// <summary>
+        /// Retrieve the value from the root activity
+        /// </summary>
+        public bool Root { get; set; }
+
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
         {
             var activity = System.Diagnostics.Activity.Current;
             if (Parent)
+            {
                 activity = activity?.Parent;
+            }
+
+            if (Root)
+            {
+                var parent = activity?.Parent;
+                while (parent != null)
+                {
+                    activity = parent;
+                    parent = activity.Parent;
+                }
+            }
 
             if (activity == null)
                 return;
