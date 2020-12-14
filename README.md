@@ -57,9 +57,9 @@ Use the layout "${activity}" in your nlog.config
 ```
 
 **Property Values**
-- SpanId : Identifier for the current activity
+- SpanId : Identifier for the current activity (Ex. database activity within current request)
 - ParentId : Identifier for the parent activity
-- TraceId : Identifier for the root activity
+- TraceId : Identifier for the root activity (Current Request Trace Identifier)
 - OperationName : Operation name of the current activity
 - StartTimeUtc : Time when the operation started
 - Duration : Duration of the operation
@@ -72,3 +72,14 @@ Use the layout "${activity}" in your nlog.config
 - SourceName : Name of the activity source associated with this activity
 - SourceVersion : Version of the activity source associated with this activity
 - ActivityKind : Relationship kind between the activity, its parents, and its children
+
+**Extract property values from parent or root**
+It is possible to specify that the above property should be extracted from either root- or parent-activity.
+
+```
+${activity:property=OperationName:parent=true}
+```
+
+```
+${activity:property=OperationName:root=true}
+```

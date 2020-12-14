@@ -6,7 +6,7 @@
     public enum ActivityTraceProperty
     {
         /// <summary>
-        /// Identifier for the current activity
+        /// Identifier for the current activity (Ex. database activity within current request)
         /// </summary>
         SpanId,
         /// <summary>
@@ -14,7 +14,7 @@
         /// </summary>
         ParentId,
         /// <summary>
-        /// Identifier for the root activity
+        /// Identifier for the root activity (Current Request Trace Identifier)
         /// </summary>
         TraceId,
         /// <summary>

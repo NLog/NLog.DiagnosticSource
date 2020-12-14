@@ -35,7 +35,7 @@ namespace NLog.LayoutRenderers
         public bool Parent { get; set; }
 
         /// <summary>
-        /// Retrieve the value from the root activity
+        /// Retrieve the value from the root activity (Containing TraceId from the active request)
         /// </summary>
         public bool Root { get; set; }
 
