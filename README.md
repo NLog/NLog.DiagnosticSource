@@ -60,7 +60,7 @@ Use the layout "${activity}" in your nlog.config
 
 - SpanId : Identifier for the current activity (Ex. database activity within current request)
 - ParentId : Identifier for the parent activity
-- TraceId : Identifier for the root activity (Current Request Trace Identifier)
+- TraceId : Identifier for the root activity (Request Trace Identifier)
 - OperationName : Operation name of the current activity
 - StartTimeUtc : Time when the operation started
 - Duration : Duration of the operation
