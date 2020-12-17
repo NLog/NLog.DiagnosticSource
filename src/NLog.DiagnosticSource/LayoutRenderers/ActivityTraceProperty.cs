@@ -6,6 +6,10 @@
     public enum ActivityTraceProperty
     {
         /// <summary>
+        /// Hierarchical structure identifier that is concatenation of TraceId + ParentId + SpanId
+        /// </summary>
+        Id,
+        /// <summary>
         /// Identifier for the current activity (Ex. database activity within current request)
         /// </summary>
         SpanId,

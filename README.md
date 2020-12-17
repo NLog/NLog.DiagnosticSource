@@ -42,7 +42,7 @@ Use the target "diagnosticListener" in your nlog.config
 
 ### How to use ActivityTraceLayoutRenderer
 
-Use the layout "${activity}" in your nlog.config
+Extract details from `System.Diagnostics.Activity.Current` using layout "${activity}" in your nlog.config
 
 ```xml
 <extensions>
@@ -58,7 +58,8 @@ Use the layout "${activity}" in your nlog.config
 
 **Property Values**
 
-- SpanId : Identifier for the current activity (Ex. database activity within current request)
+- Id : Hierarchical structure identifier that is concatenation of TraceId + ParentId + SpanId
+- SpanId : Identifier for the active activity (Ex. database activity within current request)
 - ParentId : Identifier for the parent activity
 - TraceId : Identifier for the root activity (Request Trace Identifier)
 - OperationName : Operation name of the current activity

@@ -105,6 +105,7 @@ namespace NLog.LayoutRenderers
         {
             switch (Property)
             {
+                case ActivityTraceProperty.Id: return activity.Id;
                 case ActivityTraceProperty.SpanId: return activity.GetSpanId();
                 case ActivityTraceProperty.TraceId: return activity.GetTraceId();
                 case ActivityTraceProperty.OperationName: return activity.OperationName;

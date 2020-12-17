@@ -33,6 +33,7 @@ namespace NLog.DiagnosticSource.Tests
         }
 
         [Theory]
+        [InlineData(ActivityTraceProperty.Id, false)]               // Id will never be empty
         [InlineData(ActivityTraceProperty.SpanId, false)]           // SpanId will never be empty
         [InlineData(ActivityTraceProperty.TraceId, false)]          // Will fallback to SpanId
         [InlineData(ActivityTraceProperty.OperationName, true)]
@@ -72,6 +73,7 @@ namespace NLog.DiagnosticSource.Tests
         }
 
         [Theory]
+        [InlineData(ActivityTraceProperty.Id, null, null)]            // Id will never be empty
         [InlineData(ActivityTraceProperty.SpanId, null, null)]        // SpanId will never be empty
         [InlineData(ActivityTraceProperty.TraceId, null, null)]       // Will fallback to SpanId
         [InlineData(ActivityTraceProperty.OperationName, null, "MyOperation")]
