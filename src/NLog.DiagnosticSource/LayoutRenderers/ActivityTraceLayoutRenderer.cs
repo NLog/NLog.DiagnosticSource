@@ -17,7 +17,7 @@ namespace NLog.LayoutRenderers
         /// Gets or sets the property to retrieve.
         /// </summary>
         [DefaultParameter]
-        public ActivityTraceProperty Property { get; set; } = ActivityTraceProperty.SpanId;
+        public ActivityTraceProperty Property { get; set; } = ActivityTraceProperty.TraceId;
 
         /// <summary>
         /// Single item to extract from <see cref="System.Diagnostics.Activity.Baggage"/> or <see cref="System.Diagnostics.Activity.Tags"/> or with <see cref="System.Diagnostics.Activity.GetCustomProperty(string)"/>
