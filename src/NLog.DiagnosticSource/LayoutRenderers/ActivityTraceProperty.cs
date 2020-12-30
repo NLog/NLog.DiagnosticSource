@@ -6,7 +6,7 @@
     public enum ActivityTraceProperty
     {
         /// <summary>
-        /// Hierarchical structure identifier that is concatenation of TraceId + ParentId + SpanId
+        /// Hierarchical structure identifier that is concatenation of ParentIds
         /// </summary>
         Id,
         /// <summary>

@@ -58,7 +58,7 @@ Extract details from `System.Diagnostics.Activity.Current` using layout "${activ
 
 **Property Values**
 
-- Id : Hierarchical structure identifier that is concatenation of TraceId + ParentId + SpanId
+- Id : Hierarchical structure identifier that is concatenation of ParentIds
 - SpanId : Identifier for the current activity (Ex. database activity within current request)
 - ParentId : Identifier for the parent activity
 - TraceId : Identifier for the root activity (Request Trace Identifier)

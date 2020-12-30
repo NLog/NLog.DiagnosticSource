@@ -7,44 +7,44 @@ namespace NLog.Extensions.Logging
     /// </summary>
     internal static class ActivityExtensions
     {
-        private static readonly string EmptySpanId = default(System.Diagnostics.ActivitySpanId).ToHexString();
-        private static readonly string EmptyTraceId = default(System.Diagnostics.ActivityTraceId).ToHexString();
+        private static readonly System.Diagnostics.ActivitySpanId EmptySpanId = default(System.Diagnostics.ActivitySpanId);
+        private static readonly System.Diagnostics.ActivityTraceId EmptyTraceId = default(System.Diagnostics.ActivityTraceId);
 
         public static string GetSpanId(this Activity activity)
         {
             return activity.IdFormat == ActivityIdFormat.W3C ?
-                CoalesceSpanId(activity.SpanId.ToHexString()) :
+                SpanIdToHexString(activity.SpanId) :
                 activity.Id;
         }
 
         public static string GetTraceId(this Activity activity)
         {
             return activity.IdFormat == ActivityIdFormat.W3C ?
-                CoalesceTraceId(activity.TraceId.ToHexString()) : 
+                TraceIdToHexString(activity.TraceId) : 
                 activity.RootId;
         }
 
         public static string GetParentId(this Activity activity)
         {
             return activity.IdFormat == ActivityIdFormat.W3C ?
-                CoalesceTraceId(activity.ParentSpanId.ToHexString()) :
+                SpanIdToHexString(activity.ParentSpanId) :
                 activity.ParentId;
         }
 
-        private static string CoalesceSpanId(string spanId)
+        private static string SpanIdToHexString(ActivitySpanId spanId)
         {
-            if (EmptySpanId == spanId)
+            if (EmptySpanId.Equals(spanId))
                 return string.Empty;
             else
-                return spanId;
+                return spanId.ToHexString();
         }
 
-        private static string CoalesceTraceId(string traceId)
+        private static string TraceIdToHexString(ActivityTraceId traceId)
         {
-            if (EmptyTraceId == traceId)
+            if (EmptyTraceId.Equals(traceId))
                 return string.Empty;
             else
-                return traceId;
+                return traceId.ToHexString();
         }
     }
 }
