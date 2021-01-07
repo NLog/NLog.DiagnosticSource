@@ -4,7 +4,7 @@
     <TargetFrameworks>net50;net45;netstandard2.0;netstandard1.3</TargetFrameworks>
     <RootNamespace>NLog</RootNamespace>
     <VersionPrefix>1.0.0</VersionPrefix>
-    <VersionSuffix>rc.2</VersionSuffix>
+    <VersionSuffix></VersionSuffix>
 
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <!-- AssemblyVersion must be fixed on 1.0.0.0 -->
@@ -16,7 +16,7 @@
     <Company>NLog</Company>
     <Authors>NLog</Authors>
     <Copyright>NLog</Copyright>
-    <Description>NLog Integration for Microsoft System.Diagnostics.DiagnosticSource and Activity </Description>
+    <Description>NLog Integration for Microsoft System.Diagnostics.DiagnosticSource and Activity Trace</Description>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/NLog/NLog.DiagnosticSource.git</RepositoryUrl>
     <PackageTags>DiagnosticSource;NLog;logging;log</PackageTags>
@@ -24,6 +24,7 @@
     <PackageProjectUrl>https://github.com/NLog/NLog.DiagnosticSource</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageReleaseNotes>
+First official release
     </PackageReleaseNotes>
 
     <IsPackable>true</IsPackable>
