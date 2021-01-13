@@ -49,7 +49,7 @@ First official release
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'!='net50'">
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="5.0.0" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="5.0.1" />
   </ItemGroup>
 
 </Project>
