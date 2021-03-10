@@ -110,7 +110,7 @@ namespace NLog.LayoutRenderers
                 case ActivityTraceProperty.TraceId: return activity.GetTraceId();
                 case ActivityTraceProperty.OperationName: return activity.OperationName;
                 case ActivityTraceProperty.StartTimeUtc:return activity.StartTimeUtc > DateTime.MinValue ? activity.StartTimeUtc.ToString(Format) : string.Empty;
-                case ActivityTraceProperty.Duration: return activity.StartTimeUtc > DateTime.MinValue ? activity.Duration.ToString(Format) : string.Empty;
+                case ActivityTraceProperty.Duration: return GetDuration(activity);
                 case ActivityTraceProperty.ParentId: return activity.GetParentId();
                 case ActivityTraceProperty.TraceState: return activity.TraceStateString;
                 case ActivityTraceProperty.TraceFlags: return activity.ActivityTraceFlags == System.Diagnostics.ActivityTraceFlags.None && string.IsNullOrEmpty(Format) ? string.Empty : activity.ActivityTraceFlags.ToString(Format);
@@ -123,6 +123,27 @@ namespace NLog.LayoutRenderers
                 default: return string.Empty;
             }
         }
+
+        private string GetDuration(System.Diagnostics.Activity activity)
+        {
+            var startTimeUtc = activity.StartTimeUtc;
+            if (startTimeUtc > DateTime.MinValue)
+            {
+                var duration = activity.Duration;
+                if (duration == TimeSpan.Zero)
+                {
+                    // Not ended yet
+                    var endTimeUtc = DateTime.UtcNow;
+                    duration = endTimeUtc - startTimeUtc;
+                    if (duration < TimeSpan.Zero)
+                        duration = TimeSpan.FromTicks(1);
+                }
+                return duration.ToString(Format);
+            }
+
+            return string.Empty;
+        }
+
 
         private static string GetCollectionItem<T>(string item, IEnumerable<KeyValuePair<string, T>> collection) where T : class
         {

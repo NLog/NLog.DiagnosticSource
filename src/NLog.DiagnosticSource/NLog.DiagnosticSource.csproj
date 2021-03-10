@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net50;net45;netstandard2.0;netstandard1.3</TargetFrameworks>
     <RootNamespace>NLog</RootNamespace>
-    <VersionPrefix>1.0.1</VersionPrefix>
+    <VersionPrefix>1.0.2</VersionPrefix>
     <VersionSuffix></VersionSuffix>
 
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
@@ -24,7 +24,7 @@
     <PackageProjectUrl>https://github.com/NLog/NLog.DiagnosticSource</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageReleaseNotes>
-Updated to System.Diagnostics.DiagnosticSource ver. 5.0.1 (bugfixes)
+Changed property value 'Duration' so it will output current duration even without Stop()
 
 See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activity} and DiagnosticListenerTarget
     </PackageReleaseNotes>
@@ -42,7 +42,7 @@ See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activit
   </Target>
 
   <ItemGroup>
-    <None Include="N.png" Pack="true" PackagePath="" />
+    <None Include="N.png" Pack="true" PackagePath="" Visible="false" />
   </ItemGroup>
 
   <ItemGroup>
