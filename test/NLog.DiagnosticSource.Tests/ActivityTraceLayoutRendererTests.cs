@@ -122,6 +122,33 @@ namespace NLog.DiagnosticSource.Tests
         }
 
         [Fact]
+        public void TestDurationSingleItem()
+        {
+            var logFactory = new LogFactory();
+            var xmlStream = new System.IO.StringReader(@"<nlog throwConfigExceptions='true'>
+                <targets>
+                    <target name='Memory' type='Memory' layout='${activity:Duration:format=hh\\\:mm\\\:ss\\.fff}' />
+                </targets>
+                <rules>
+                    <logger name='*' writeTo='Memory' />
+                </rules></nlog>");
+            var xmlReader = System.Xml.XmlReader.Create(xmlStream);
+            var logConfig = new NLog.Config.XmlLoggingConfiguration(xmlReader, null);
+            logFactory.Configuration = logConfig;
+            var memTarget = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("Memory");
+            
+            var logger = logFactory.GetCurrentClassLogger();
+            using (var newActivity = new System.Diagnostics.Activity("MyOperation").Start())
+            {
+                var dateTime = DateTime.UtcNow.Date;
+                newActivity.SetStartTime(dateTime);
+                newActivity.SetEndTime(dateTime.AddHours(1).AddMinutes(2).AddSeconds(3).AddMilliseconds(4));
+                logger.Info("Hello");
+                Assert.Equal("01:02:03.004", System.Linq.Enumerable.FirstOrDefault(memTarget.Logs));
+            }
+        }
+
+        [Fact]
         public void TestBaggageSingleItem()
         {
             // Arrange
