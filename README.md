@@ -24,25 +24,9 @@ NLog ActivityTraceLayoutRenderer for [Microsoft Activity Trace](https://github.c
     </extensions>
     ```
 
-### How to use DiagnosticListenerTarget
-
-Use the target "diagnosticListener" in your nlog.config
-
-```xml
-<extensions>
-    <add assembly="NLog.DiagnosticSource"/>
-</extensions>
-<targets>
-    <target name="diagSource" xsi:type="diagnosticListener" layout="${message}" sourceName="nlog" eventName="${logger}" />
-</targets>
-<rules>
-    <logger minLevel="Info" writeTo="diagSource" />
-</rules>
-```
-
 ### How to use ActivityTraceLayoutRenderer
-
-Extract details from `System.Diagnostics.Activity.Current` using layout "${activity}" in your nlog.config
+The `System.Diagnostics.Activity.Current` from Microsoft allows one to create OpenTelemetry spans. 
+NLog can capture the span details together with the LogEvent by using "${activity}" lik this:
 
 ```xml
 <extensions>
@@ -85,4 +69,20 @@ ${activity:property=OperationName:parent=true}
 
 ```
 ${activity:property=OperationName:root=true}
+```
+
+### How to use DiagnosticListenerTarget
+
+Use the target "diagnosticListener" in your nlog.config
+
+```xml
+<extensions>
+    <add assembly="NLog.DiagnosticSource"/>
+</extensions>
+<targets>
+    <target name="diagSource" xsi:type="diagnosticListener" layout="${message}" sourceName="nlog" eventName="${logger}" />
+</targets>
+<rules>
+    <logger minLevel="Info" writeTo="diagSource" />
+</rules>
 ```
