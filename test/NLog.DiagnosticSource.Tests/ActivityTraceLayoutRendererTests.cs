@@ -39,6 +39,7 @@ namespace NLog.DiagnosticSource.Tests
         [InlineData(ActivityTraceProperty.OperationName, true)]
         [InlineData(ActivityTraceProperty.StartTimeUtc, true)]
         [InlineData(ActivityTraceProperty.Duration, true)]
+        [InlineData(ActivityTraceProperty.DurationMs, true)]
         [InlineData(ActivityTraceProperty.Baggage, true)]
         [InlineData(ActivityTraceProperty.Tags, true)]
         [InlineData(ActivityTraceProperty.ParentId, true)]
@@ -98,7 +99,7 @@ namespace NLog.DiagnosticSource.Tests
 
             try
             {
-                DateTime startedTime = new DateTime((TimeSpan.FromHours(DateTime.UtcNow.Hour - 1) + TimeSpan.FromMilliseconds(123)).Ticks, DateTimeKind.Utc);
+                DateTime startedTime = DateTime.UtcNow.Date.AddHours(DateTime.UtcNow.Hour - 1).AddMilliseconds(123);
 
                 LogManager.ThrowExceptions = true;
                 using (var newActivity = new System.Diagnostics.Activity("MyOperation").Start())
@@ -121,13 +122,15 @@ namespace NLog.DiagnosticSource.Tests
             }
         }
 
-        [Fact]
-        public void TestDurationSingleItem()
+        [Theory]
+        [InlineData(@"${activity:Duration:format=hh\\\:mm\\\:ss\\.fff}", "01:02:03.004")]
+        [InlineData(@"${activity:DurationMs}", "3723004.056")]
+        public void TestDurationSingleItem(string inputLayout, string expectedResult)
         {
             var logFactory = new LogFactory();
-            var xmlStream = new System.IO.StringReader(@"<nlog throwConfigExceptions='true'>
+            var xmlStream = new System.IO.StringReader($@"<nlog throwConfigExceptions='true'>
                 <targets>
-                    <target name='Memory' type='Memory' layout='${activity:Duration:format=hh\\\:mm\\\:ss\\.fff}' />
+                    <target name='Memory' type='Memory' layout='{inputLayout}' />
                 </targets>
                 <rules>
                     <logger name='*' writeTo='Memory' />
@@ -142,9 +145,9 @@ namespace NLog.DiagnosticSource.Tests
             {
                 var dateTime = DateTime.UtcNow.Date;
                 newActivity.SetStartTime(dateTime);
-                newActivity.SetEndTime(dateTime.AddHours(1).AddMinutes(2).AddSeconds(3).AddMilliseconds(4));
+                newActivity.SetEndTime(dateTime.AddHours(1).AddMinutes(2).AddSeconds(3).AddTicks(40567));
                 logger.Info("Hello");
-                Assert.Equal("01:02:03.004", System.Linq.Enumerable.FirstOrDefault(memTarget.Logs));
+                Assert.Equal(expectedResult, System.Linq.Enumerable.FirstOrDefault(memTarget.Logs));
             }
         }
 

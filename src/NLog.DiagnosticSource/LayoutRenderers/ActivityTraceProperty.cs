@@ -30,7 +30,7 @@
         /// </summary>
         StartTimeUtc,
         /// <summary>
-        /// Duration of the operation.
+        /// Duration of the operation (formatted as TimeSpan)
         /// </summary>
         Duration,
         /// <summary>
@@ -69,5 +69,9 @@
         /// Relationship kind between the activity, its parents, and its children
         /// </summary>
         ActivityKind,
+        /// <summary>
+        /// Duration of the operation (formatted as TimeSpan.TotalMilliseconds)
+        /// </summary>
+        DurationMs,
     }
 }
