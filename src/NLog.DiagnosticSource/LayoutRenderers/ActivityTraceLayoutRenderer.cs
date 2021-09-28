@@ -13,6 +13,8 @@ namespace NLog.LayoutRenderers
     [ThreadSafe]
     public sealed class ActivityTraceLayoutRenderer : LayoutRenderer
     {
+        private static string[] DurationMsFormat = null;
+
         /// <summary>
         /// Gets or sets the property to retrieve.
         /// </summary>
@@ -30,6 +32,11 @@ namespace NLog.LayoutRenderers
         public string Format { get; set; }
 
         /// <summary>
+        /// Gets or sets the culture used for rendering.
+        /// </summary>
+        public System.Globalization.CultureInfo Culture { get; set; } = System.Globalization.CultureInfo.InvariantCulture;
+
+        /// <summary>
         /// Retrieve the value from the parent activity
         /// </summary>
         public bool Parent { get; set; }
@@ -38,6 +45,17 @@ namespace NLog.LayoutRenderers
         /// Retrieve the value from the root activity (Containing TraceId from the active request)
         /// </summary>
         public bool Root { get; set; }
+
+        /// <inheritdoc />
+        protected override void InitializeLayoutRenderer()
+        {
+            if (Property == ActivityTraceProperty.DurationMs && DurationMsFormat == null)
+            {
+                System.Threading.Interlocked.CompareExchange(ref DurationMsFormat, System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(System.Linq.Enumerable.Range(0, 1000), i => i.ToString())), null);
+            }
+
+            base.InitializeLayoutRenderer();
+        }
 
         /// <inheritdoc />
         protected override void Append(StringBuilder builder, LogEventInfo logEvent)
@@ -94,10 +112,60 @@ namespace NLog.LayoutRenderers
                     RenderActivityEventsFlat(builder, activity.Events);
                 }
             }
+            else if (Property == ActivityTraceProperty.DurationMs)
+            {
+                RenderDurationMs(builder, activity);
+            }
             else
             {
                 var value = GetValue(activity);
                 builder.Append(value);
+            }
+        }
+
+        private void RenderDurationMs(StringBuilder builder, System.Diagnostics.Activity activity)
+        {
+            var durationMs = GetDurationMs(activity);
+            if (durationMs.HasValue)
+            {
+                if (ReferenceEquals(Culture, System.Globalization.CultureInfo.InvariantCulture) && string.IsNullOrEmpty(Format))
+                {
+                    var truncateMs = (long)durationMs.Value;
+                    if (DurationMsFormat != null && truncateMs >= 0 && truncateMs <= DurationMsFormat.Length)
+                    {
+                        builder.Append(DurationMsFormat[truncateMs]);
+                    }
+                    else
+                    {
+                        builder.Append(truncateMs);
+                    }
+                    var preciseMs = (int)((durationMs.Value - truncateMs) * 1000.0);
+                    if (preciseMs > 0)
+                    {
+                        builder.Append('.');
+                        if (preciseMs < 100)
+                            builder.Append('0');
+                        if (preciseMs < 10)
+                            builder.Append('0');
+
+                        if (DurationMsFormat != null && preciseMs <= DurationMsFormat.Length)
+                        {
+                            builder.Append(DurationMsFormat[preciseMs]);
+                        }
+                        else
+                        {
+                            builder.Append(preciseMs);
+                        }
+                    }
+                    else
+                    {
+                        builder.Append(".0");
+                    }
+                }
+                else
+                {
+                    builder.Append(durationMs.Value.ToString(Format, Culture));
+                }
             }
         }
 
@@ -109,7 +177,7 @@ namespace NLog.LayoutRenderers
                 case ActivityTraceProperty.SpanId: return activity.GetSpanId();
                 case ActivityTraceProperty.TraceId: return activity.GetTraceId();
                 case ActivityTraceProperty.OperationName: return activity.OperationName;
-                case ActivityTraceProperty.StartTimeUtc:return activity.StartTimeUtc > DateTime.MinValue ? activity.StartTimeUtc.ToString(Format) : string.Empty;
+                case ActivityTraceProperty.StartTimeUtc:return activity.StartTimeUtc > DateTime.MinValue ? activity.StartTimeUtc.ToString(Format, Culture) : string.Empty;
                 case ActivityTraceProperty.Duration: return GetDuration(activity);
                 case ActivityTraceProperty.ParentId: return activity.GetParentId();
                 case ActivityTraceProperty.TraceState: return activity.TraceStateString;
@@ -126,6 +194,24 @@ namespace NLog.LayoutRenderers
 
         private string GetDuration(System.Diagnostics.Activity activity)
         {
+            var duration = GetDurationTimeSpan(activity);
+            if (duration.HasValue)
+                return duration.Value.ToString(Format, Culture);
+            else
+                return string.Empty;
+        }
+
+        private double? GetDurationMs(System.Diagnostics.Activity activity)
+        {
+            var duration = GetDurationTimeSpan(activity);
+            if (duration.HasValue)
+                return duration.Value.TotalMilliseconds;
+            else
+                return default(double?);
+        }
+
+        private TimeSpan? GetDurationTimeSpan(System.Diagnostics.Activity activity)
+        {
             var startTimeUtc = activity.StartTimeUtc;
             if (startTimeUtc > DateTime.MinValue)
             {
@@ -138,12 +224,12 @@ namespace NLog.LayoutRenderers
                     if (duration < TimeSpan.Zero)
                         duration = TimeSpan.FromTicks(1);
                 }
-                return duration.ToString(Format);
+                
+                return duration;
             }
 
-            return string.Empty;
+            return default(TimeSpan?);
         }
-
 
         private static string GetCollectionItem<T>(string item, IEnumerable<KeyValuePair<string, T>> collection) where T : class
         {
@@ -200,13 +286,13 @@ namespace NLog.LayoutRenderers
                     builder.Append(", ");
                 firstItem = false;
                 builder.Append('"');
-                builder.Append(keyValue.Key);
+                builder.Append(EscapeStringQuotes(keyValue.Key));
 
                 string stringValue = ConvertToString(keyValue.Value);
                 if (stringValue == null)
                     builder.Append("\": null");
                 else
-                    builder.Append("\": \"").Append(stringValue).Append('"');
+                    builder.Append("\": \"").Append(EscapeStringQuotes(stringValue)).Append('"');
             }
 
             if (!firstItem)
@@ -246,7 +332,7 @@ namespace NLog.LayoutRenderers
 
                 firstItem = false;
                 builder.Append("{ \"name\": \"");
-                builder.Append(item.Name);
+                builder.Append(EscapeStringQuotes(item.Name));
                 builder.Append("\", \"timestamp\": \"");
                 builder.Append(item.Timestamp.ToString("yyyy-MM-dd HH:mm:ss zzz", System.Globalization.CultureInfo.InvariantCulture));
                 RenderStringDictionaryJson(item.Tags, builder, ", \"tags\"={ ");
@@ -268,6 +354,11 @@ namespace NLog.LayoutRenderers
                 case System.Diagnostics.ActivityKind.Consumer: return nameof(System.Diagnostics.ActivityKind.Consumer);
                 default: return activityKind.ToString();
             }
+        }
+
+        private static string EscapeStringQuotes(string stringValue)
+        {
+            return stringValue.Replace("\"", "\\\"");
         }
 
         private static string ConvertToString(object objectValue)

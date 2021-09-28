@@ -48,11 +48,15 @@ NLog can capture the span details together with the LogEvent by using "${activit
 - TraceId : Identifier for the root activity (Request Trace Identifier)
 - OperationName : Operation name of the current activity
 - StartTimeUtc : Time when the operation started
-- Duration : Duration of the operation
+- Duration : Duration of the operation (formatted as TimeSpan)
+- DurationMs : Duration of the operation (formatted as TimeSpan.TotalMilliseconds)
+- Format: Format for rendering the property.
+- Culture: CultureInfo for rendering the property (Default Invariant Culture)
+- Item: Lookup a single item from collection (Baggage, Tags, CustomProperty)
 - Baggage : Collection of key/value pairs that are passed to children of this Activity
 - Tags : Collection of key/value pairs that are NOT passed to children of this Activity
-- Events : Events attached to this activity
 - CustomProperty : Custom property assigned to this activity. Must be used together with Item-option
+- Events : Events attached to this activity
 - TraceState : W3C tracestate header
 - TraceFlags : See System.Diagnostics.ActivityTraceFlags for activity (defined by the W3C ID specification) 
 - SourceName : Name of the activity source associated with this activity
