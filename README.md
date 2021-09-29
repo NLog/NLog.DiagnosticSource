@@ -26,7 +26,7 @@ NLog ActivityTraceLayoutRenderer for [Microsoft Activity Trace](https://github.c
 
 ### How to use ActivityTraceLayoutRenderer
 The `System.Diagnostics.Activity.Current` from Microsoft allows one to create OpenTelemetry spans. 
-NLog can capture the span details together with the LogEvent by using "${activity}" like this:
+NLog can capture the span details together with the LogEvent by using `${activity}` like this:
 
 ```xml
 <extensions>
