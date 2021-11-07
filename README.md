@@ -13,7 +13,7 @@ NLog ActivityTraceLayoutRenderer for [Microsoft Activity Trace](https://github.c
     `Install-Package NLog.DiagnosticSource` or in your csproj:
 
     ```xml
-    <PackageReference Include="NLog.DiagnosticSource" Version="1.0.0" />
+    <PackageReference Include="NLog.DiagnosticSource" Version="1.*" />
     ```
 
 2) Add to your nlog.config:
