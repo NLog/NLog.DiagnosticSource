@@ -40,8 +40,7 @@ NLog can capture the span details together with the LogEvent by using `${activit
 </rules>
 ```
 
-**Property Values**
-
+**Property Enum Values**
 - Id : Hierarchical structure identifier that is concatenation of ParentIds
 - SpanId : Identifier for the current activity (Ex. database activity within current request)
 - ParentId : Identifier for the parent activity
@@ -50,9 +49,6 @@ NLog can capture the span details together with the LogEvent by using `${activit
 - StartTimeUtc : Time when the operation started
 - Duration : Duration of the operation (formatted as TimeSpan)
 - DurationMs : Duration of the operation (formatted as TimeSpan.TotalMilliseconds)
-- Format: Format for rendering the property.
-- Culture: CultureInfo for rendering the property (Default Invariant Culture)
-- Item: Lookup a single item from collection (Baggage, Tags, CustomProperty)
 - Baggage : Collection of key/value pairs that are passed to children of this Activity
 - Tags : Collection of key/value pairs that are NOT passed to children of this Activity
 - CustomProperty : Custom property assigned to this activity. Must be used together with Item-option
@@ -62,6 +58,11 @@ NLog can capture the span details together with the LogEvent by using `${activit
 - SourceName : Name of the activity source associated with this activity
 - SourceVersion : Version of the activity source associated with this activity
 - ActivityKind : Relationship kind between the activity, its parents, and its children
+
+**Formatting**
+- Format: Format for rendering the property.
+- Culture: CultureInfo for rendering the property (Default Invariant Culture)
+- Item: Lookup a single item from property-collection (Baggage, Tags, CustomProperty)
 
 **Extract property values from parent or root**
 
