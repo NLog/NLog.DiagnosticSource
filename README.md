@@ -49,10 +49,10 @@ NLog can capture the span details together with the LogEvent by using `${activit
 - StartTimeUtc : Time when the operation started
 - Duration : Duration of the operation (formatted as TimeSpan)
 - DurationMs : Duration of the operation (formatted as TimeSpan.TotalMilliseconds)
-- Baggage : Collection of key/value pairs that are passed to children of this Activity
-- Tags : Collection of key/value pairs that are NOT passed to children of this Activity
+- Baggage : Collection of key/value pairs that are passed to children of this Activity (Use `Format="@"` for json-dictionary)
+- Tags : Collection of key/value pairs that are NOT passed to children of this Activity (Use `Format="@"` for json-dictionary)
 - CustomProperty : Custom property assigned to this activity. Must be used together with Item-option
-- Events : Events attached to this activity
+- Events : Events attached to this activity (Use `Format="@"` for json-array)
 - TraceState : W3C tracestate header
 - TraceFlags : See System.Diagnostics.ActivityTraceFlags for activity (defined by the W3C ID specification) 
 - SourceName : Name of the activity source associated with this activity
