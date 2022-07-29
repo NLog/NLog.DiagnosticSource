@@ -131,7 +131,7 @@ namespace NLog.LayoutRenderers
                 if (ReferenceEquals(Culture, System.Globalization.CultureInfo.InvariantCulture) && string.IsNullOrEmpty(Format))
                 {
                     var truncateMs = (long)durationMs.Value;
-                    if (DurationMsFormat != null && truncateMs >= 0 && truncateMs <= DurationMsFormat.Length)
+                    if (DurationMsFormat != null && truncateMs >= 0 && truncateMs < DurationMsFormat.Length)
                     {
                         builder.Append(DurationMsFormat[truncateMs]);
                     }
@@ -148,7 +148,7 @@ namespace NLog.LayoutRenderers
                         if (preciseMs < 10)
                             builder.Append('0');
 
-                        if (DurationMsFormat != null && preciseMs <= DurationMsFormat.Length)
+                        if (DurationMsFormat != null && preciseMs < DurationMsFormat.Length)
                         {
                             builder.Append(DurationMsFormat[preciseMs]);
                         }
