@@ -63,6 +63,9 @@ NLog can capture the span details together with the LogEvent by using `${activit
 - Format: Format for rendering the property.
 - Culture: CultureInfo for rendering the property (Default Invariant Culture)
 - Item: Lookup a single item from property-collection (Baggage, Tags, CustomProperty)
+  - `${activity:property=Baggage:item=BaggageKey}`
+  - `${activity:property=Tags:item=TagKey}`
+  - `${activity:property=CustomProperty:item=PropertyKey}`
 
 **Extract property values from parent or root**
 
