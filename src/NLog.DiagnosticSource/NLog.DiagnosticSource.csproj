@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net50;net461;netstandard2.0;netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>net60;net461;netstandard2.0</TargetFrameworks>
     <RootNamespace>NLog</RootNamespace>
-    <VersionPrefix>1.3.0</VersionPrefix>
+    <VersionPrefix>5.0.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
 
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <!-- AssemblyVersion must be fixed on 1.0.0.0 -->
+    <AssemblyVersion>5.0.0.0</AssemblyVersion>
+    <!-- AssemblyVersion must be fixed on 5.0.0.0 -->
     <AppVeyorBuildNumber>$(APPVEYOR_BUILD_NUMBER)</AppVeyorBuildNumber>
     <AppVeyorBuildNumber Condition="'$(AppVeyorBuildNumber)' == ''">0</AppVeyorBuildNumber>
     <FileVersion>$(VersionPrefix).$(AppVeyorBuildNumber)</FileVersion>
@@ -24,8 +24,9 @@
     <PackageProjectUrl>https://github.com/NLog/NLog.DiagnosticSource</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageReleaseNotes>
-Removed target platform net45 and replaced with net461
-Fixed offset by one in ActivityTraceProperty.DurationMs (#57)
+Removed target platform NET5 and replaced with NET6
+Updated to System.Diagnostics.DiagnosticSource v6
+Updated to NLog v5
 
 See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activity} and DiagnosticListenerTarget
     </PackageReleaseNotes>
@@ -47,12 +48,12 @@ See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activit
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="4.5.11" />
+    <PackageReference Include="NLog" Version="5.0.5" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'!='net50'">
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="5.0.1" />
+  <ItemGroup Condition="'$(TargetFramework)'!='net60'">
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

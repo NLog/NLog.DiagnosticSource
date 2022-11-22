@@ -10,7 +10,6 @@
     /// ${onhasactivity:, ActivityTraceId\: ${activity:traceid}}
     /// </example>
     [LayoutRenderer("onhasactivity")]
-    [ThreadSafe]
     public sealed class OnHasActivityTraceLayoutRendererWrapper : WrapperLayoutRendererBase
     {
         /// <inheritdoc/>

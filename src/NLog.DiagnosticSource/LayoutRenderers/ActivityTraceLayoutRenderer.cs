@@ -10,7 +10,6 @@ namespace NLog.LayoutRenderers
     /// Layout renderer that can render properties from <see cref="System.Diagnostics.Activity.Current"/>
     /// </summary>
     [LayoutRenderer("activity")]
-    [ThreadSafe]
     public sealed class ActivityTraceLayoutRenderer : LayoutRenderer
     {
         private static string[] DurationMsFormat = null;
