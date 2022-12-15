@@ -176,17 +176,17 @@ namespace NLog.LayoutRenderers
                 case ActivityTraceProperty.SpanId: return activity.GetSpanId();
                 case ActivityTraceProperty.TraceId: return activity.GetTraceId();
                 case ActivityTraceProperty.OperationName: return activity.OperationName;
-                case ActivityTraceProperty.StartTimeUtc:return activity.StartTimeUtc > DateTime.MinValue ? activity.StartTimeUtc.ToString(Format, Culture) : string.Empty;
+                case ActivityTraceProperty.StartTimeUtc: return activity.StartTimeUtc > DateTime.MinValue ? activity.StartTimeUtc.ToString(Format, Culture) : string.Empty;
                 case ActivityTraceProperty.Duration: return GetDuration(activity);
                 case ActivityTraceProperty.ParentId: return activity.GetParentId();
                 case ActivityTraceProperty.TraceState: return activity.TraceStateString;
-                case ActivityTraceProperty.TraceFlags: return activity.ActivityTraceFlags == System.Diagnostics.ActivityTraceFlags.None && string.IsNullOrEmpty(Format) ? string.Empty : activity.ActivityTraceFlags.ToString(Format);
+                case ActivityTraceProperty.TraceFlags: return ConvertToString(activity.ActivityTraceFlags, Format);
                 case ActivityTraceProperty.Baggage: return GetCollectionItem(Item, activity.Baggage);
                 case ActivityTraceProperty.Tags: return GetCollectionItem(Item, activity.TagObjects);
                 case ActivityTraceProperty.CustomProperty: return string.IsNullOrEmpty(Item) ? string.Empty : (activity.GetCustomProperty(Item)?.ToString() ?? activity.Parent?.GetCustomProperty(Item)?.ToString() ?? string.Empty);
                 case ActivityTraceProperty.SourceName: return activity.Source?.Name;
                 case ActivityTraceProperty.SourceVersion: return activity.Source?.Version;
-                case ActivityTraceProperty.ActivityKind: return ConvertToString(activity.Kind);
+                case ActivityTraceProperty.ActivityKind: return ConvertToString(activity.Kind, Format);
                 default: return string.Empty;
             }
         }
@@ -342,22 +342,56 @@ namespace NLog.LayoutRenderers
                 builder.Append(" ]");
         }
 
-        private static string ConvertToString(System.Diagnostics.ActivityKind activityKind)
+        private string ConvertToString(System.Diagnostics.ActivityTraceFlags traceFlags, string format)
         {
-            switch (activityKind)
+            if (string.IsNullOrEmpty(format))
             {
-                case System.Diagnostics.ActivityKind.Internal: return string.Empty; // unassigned so not interesting
-                case System.Diagnostics.ActivityKind.Server: return nameof(System.Diagnostics.ActivityKind.Server);
-                case System.Diagnostics.ActivityKind.Client: return nameof(System.Diagnostics.ActivityKind.Client);
-                case System.Diagnostics.ActivityKind.Producer: return nameof(System.Diagnostics.ActivityKind.Producer);
-                case System.Diagnostics.ActivityKind.Consumer: return nameof(System.Diagnostics.ActivityKind.Consumer);
-                default: return activityKind.ToString();
+                switch (traceFlags)
+                {
+                    case System.Diagnostics.ActivityTraceFlags.None: return string.Empty;   // unassigned so not interesting
+                    case System.Diagnostics.ActivityTraceFlags.Recorded: return nameof(System.Diagnostics.ActivityTraceFlags.Recorded);
+                    default: return traceFlags.ToString();
+                }
             }
+            else if (FormatEnumAsInteger(format))
+            {
+                switch (traceFlags)
+                {
+                    case System.Diagnostics.ActivityTraceFlags.None: return "0";
+                    case System.Diagnostics.ActivityTraceFlags.Recorded: return "1";
+                }
+            }
+
+            return traceFlags.ToString(format);
         }
 
-        private static string EscapeStringQuotes(string stringValue)
+        private static string ConvertToString(System.Diagnostics.ActivityKind activityKind, string format)
         {
-            return stringValue.Replace("\"", "\\\"");
+            if (string.IsNullOrEmpty(format))
+            {
+                switch (activityKind)
+                {
+                    case System.Diagnostics.ActivityKind.Internal: return string.Empty; // unassigned so not interesting
+                    case System.Diagnostics.ActivityKind.Server: return nameof(System.Diagnostics.ActivityKind.Server);
+                    case System.Diagnostics.ActivityKind.Client: return nameof(System.Diagnostics.ActivityKind.Client);
+                    case System.Diagnostics.ActivityKind.Producer: return nameof(System.Diagnostics.ActivityKind.Producer);
+                    case System.Diagnostics.ActivityKind.Consumer: return nameof(System.Diagnostics.ActivityKind.Consumer);
+                    default: return activityKind.ToString();
+                }
+            }
+            else if (FormatEnumAsInteger(format))
+            {
+                switch (activityKind)
+                {
+                    case System.Diagnostics.ActivityKind.Internal: return "0";
+                    case System.Diagnostics.ActivityKind.Server: return "1";
+                    case System.Diagnostics.ActivityKind.Client: return "2";
+                    case System.Diagnostics.ActivityKind.Producer: return "3";
+                    case System.Diagnostics.ActivityKind.Consumer: return "4";
+                }
+            }
+
+            return activityKind.ToString(format);
         }
 
         private static string ConvertToString(object objectValue)
@@ -373,6 +407,16 @@ namespace NLog.LayoutRenderers
             {
                 return string.Empty;
             }
+        }
+
+        private static bool FormatEnumAsInteger(string format)
+        {
+            return format?.Length == 1 && (format[0] == 'd' || format[0] == 'D');
+        }
+
+        private static string EscapeStringQuotes(string stringValue)
+        {
+            return stringValue.Replace("\"", "\\\"");
         }
     }
 }

@@ -54,10 +54,10 @@ NLog can capture the span details together with the LogEvent by using `${activit
 - CustomProperty : Custom property assigned to this activity. Must be used together with Item-option
 - Events : Events attached to this activity (Use `Format="@"` for json-array)
 - TraceState : W3C tracestate header
-- TraceFlags : See System.Diagnostics.ActivityTraceFlags for activity (defined by the W3C ID specification) 
+- TraceFlags : See System.Diagnostics.ActivityTraceFlags for activity (defined by the W3C ID specification). Can be combined with `format="d"`
 - SourceName : Name of the activity source associated with this activity
 - SourceVersion : Version of the activity source associated with this activity
-- ActivityKind : Relationship kind between the activity, its parents, and its children
+- ActivityKind : Relationship kind between the activity, its parents, and its children. Can be combined with `format="d"`
 
 **Formatting**
 - Format: Format for rendering the property.

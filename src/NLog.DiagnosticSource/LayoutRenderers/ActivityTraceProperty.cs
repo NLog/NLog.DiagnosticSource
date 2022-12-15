@@ -46,7 +46,7 @@
         /// </summary>
         TraceState,
         /// <summary>
-        /// <see cref="System.Diagnostics.ActivityTraceFlags"/> for activity (defined by the W3C ID specification) 
+        /// <see cref="System.Diagnostics.ActivityTraceFlags"/> for activity (defined by the W3C ID specification). Can be combined with Format="d"
         /// </summary>
         TraceFlags,
         /// <summary>
@@ -66,7 +66,7 @@
         /// </summary>
         SourceVersion,
         /// <summary>
-        /// Relationship kind between the activity, its parents, and its children
+        /// Relationship kind between the activity, its parents, and its children. Can be combined with Format="d"
         /// </summary>
         ActivityKind,
         /// <summary>

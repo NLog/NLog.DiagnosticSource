@@ -88,11 +88,17 @@ namespace NLog.DiagnosticSource.Tests
         [InlineData(ActivityTraceProperty.ParentId, null, "")]
         [InlineData(ActivityTraceProperty.TraceState, null, "")]
         [InlineData(ActivityTraceProperty.TraceFlags, null, "")]
+        [InlineData(ActivityTraceProperty.TraceFlags, "d", "0")]
+        [InlineData(ActivityTraceProperty.TraceFlags, "D", "0")]
+        [InlineData(ActivityTraceProperty.TraceFlags, "X", "00000000")]
         [InlineData(ActivityTraceProperty.Events, null, "")]
         [InlineData(ActivityTraceProperty.CustomProperty, null, "")]
         [InlineData(ActivityTraceProperty.SourceName, null, "")]
         [InlineData(ActivityTraceProperty.SourceVersion, null, "")]
         [InlineData(ActivityTraceProperty.ActivityKind, null, "")]
+        [InlineData(ActivityTraceProperty.ActivityKind, "d", "0")]
+        [InlineData(ActivityTraceProperty.ActivityKind, "D", "0")]
+        [InlineData(ActivityTraceProperty.ActivityKind, "X", "00000000")]
         public void TestAllPropertiesWhenActivityRunning(ActivityTraceProperty property, string format, string output)
         {
             bool orgThrowExceptions = LogManager.ThrowExceptions;
