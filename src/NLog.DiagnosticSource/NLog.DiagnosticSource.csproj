@@ -53,7 +53,7 @@ See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activit
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'!='net60'">
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="6.0.0" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="7.0.1" />
   </ItemGroup>
 
 </Project>
