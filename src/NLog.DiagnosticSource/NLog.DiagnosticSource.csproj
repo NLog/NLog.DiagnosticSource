@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net60;net461;netstandard2.0</TargetFrameworks>
@@ -48,7 +48,7 @@ See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activit
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="5.0.5" />
+    <PackageReference Include="NLog" Version="5.2.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
 
