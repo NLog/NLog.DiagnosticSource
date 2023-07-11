@@ -83,12 +83,15 @@ ${activity:property=OperationName:root=true}
 
 When using the default HostBuilder then it will automatically setup the following [ActivityTrackingOptions](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.loggerfactoryoptions.activitytrackingoptions):
 ```c#
-      builder.ConfigureLogging(loggingBuilder =>
-              loggingBuilder.Configure(options =>
-                  options.ActivityTrackingOptions =
-                      ActivityTrackingOptions.TraceId
-                      | ActivityTrackingOptions.SpanId
-                      | ActivityTrackingOptions.ParentId));
+builder.ConfigureLogging((hostingContext, loggingBuilder) =>
+{
+      loggingBuilder.Configure(options =>
+      {
+            options.ActivityTrackingOptions = ActivityTrackingOptions.SpanId
+                                            | ActivityTrackingOptions.TraceId
+                                            | ActivityTrackingOptions.ParentId;
+      });
+}).
 ```
 If creating a custom HostBuilder, then one have to manually setup the ActivityTrackingOptions like shown above.
 
