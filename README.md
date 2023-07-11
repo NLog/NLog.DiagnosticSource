@@ -1,7 +1,7 @@
 # NLog.DiagnosticSource
-NLog DiagnosticListenerTarget for [Microsoft DiagnosticSource](https://github.com/dotnet/runtime/blob/master/src/libraries/System.Diagnostics.DiagnosticSource/src/DiagnosticSourceUsersGuide.md)
-
 NLog ActivityTraceLayoutRenderer for [Microsoft Activity Trace](https://github.com/dotnet/runtime/blob/master/src/libraries/System.Diagnostics.DiagnosticSource/src/ActivityUserGuide.md)
+
+NLog DiagnosticListenerTarget for [Microsoft DiagnosticSource](https://github.com/dotnet/runtime/blob/master/src/libraries/System.Diagnostics.DiagnosticSource/src/DiagnosticSourceUsersGuide.md)
 
 [![Version](https://badge.fury.io/nu/NLog.DiagnosticSource.svg)](https://www.nuget.org/packages/NLog.DiagnosticSource)
 [![AppVeyor](https://img.shields.io/appveyor/ci/nlog/NLog-DiagnosticSource/master.svg)](https://ci.appveyor.com/project/nlog/NLog-DiagnosticSource/branch/master)
@@ -78,6 +78,19 @@ ${activity:property=OperationName:parent=true}
 ```
 ${activity:property=OperationName:root=true}
 ```
+
+**Manually configure ActivityTrackingOptions**
+
+When using the default HostBuilder then it will automatically setup the following [ActivityTrackingOptions](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.loggerfactoryoptions.activitytrackingoptions):
+```c#
+      builder.ConfigureLogging(loggingBuilder =>
+              loggingBuilder.Configure(options =>
+                  options.ActivityTrackingOptions =
+                      ActivityTrackingOptions.TraceId
+                      | ActivityTrackingOptions.SpanId
+                      | ActivityTrackingOptions.ParentId));
+```
+If creating a custom HostBuilder, then one have to manually setup the ActivityTrackingOptions like shown above.
 
 ### How to use DiagnosticListenerTarget
 
