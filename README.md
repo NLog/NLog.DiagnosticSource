@@ -24,11 +24,21 @@ NLog DiagnosticListenerTarget for [Microsoft DiagnosticSource](https://github.co
     </extensions>
     ```
 
+   Alternative register from code using fluent configuration API:
+   ```csharp
+   LogManager.Setup().SetupExtensions(ext => {
+      ext.RegisterTarget<NLog.Targets.DiagnosticListenerTarget>();
+      ext.RegisterLayoutRenderer<NLog.LayoutRenderers.ActivityTraceLayoutRenderer>();
+   });
+   ```
+
 ### How to use ActivityTraceLayoutRenderer
 The `System.Diagnostics.Activity.Current` from Microsoft allows one to create OpenTelemetry spans. 
-NLog can capture the span details together with the LogEvent by using `${activity}` like this:
+
+Example of `NLog.config` file that outputs span-details together with LogEvent by using `${activity}`:
 
 ```xml
+<nlog>
 <extensions>
     <add assembly="NLog.DiagnosticSource"/>
 </extensions>
@@ -38,6 +48,7 @@ NLog can capture the span details together with the LogEvent by using `${activit
 <rules>
     <logger minLevel="Info" writeTo="console" />
 </rules>
+</nlog>
 ```
 
 **Property Enum Values**
@@ -97,9 +108,10 @@ If creating a custom HostBuilder, then one have to manually setup the ActivityTr
 
 ### How to use DiagnosticListenerTarget
 
-Use the target "diagnosticListener" in your nlog.config
+Example of `NLog.config` file that uses the `diagnosticListener` target:
 
 ```xml
+<nlog>
 <extensions>
     <add assembly="NLog.DiagnosticSource"/>
 </extensions>
@@ -109,4 +121,5 @@ Use the target "diagnosticListener" in your nlog.config
 <rules>
     <logger minLevel="Info" writeTo="diagSource" />
 </rules>
+</nlog>
 ```
