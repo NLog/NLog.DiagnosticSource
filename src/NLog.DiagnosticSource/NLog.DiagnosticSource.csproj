@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net60;net461;netstandard2.0</TargetFrameworks>
@@ -45,7 +45,7 @@ See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activit
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'!='net60'">
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="6.0.0" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
