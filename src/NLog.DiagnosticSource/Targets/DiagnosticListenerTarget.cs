@@ -51,12 +51,11 @@ namespace NLog.Targets
             DiagnosticSource diagnosticSource = LookupDiagnosticSource(sourceName);
             if (diagnosticSource.IsEnabled(eventName))
             {
-                var eventData = CreateEventData(logEvent);
-                diagnosticSource.Write(eventName, eventData);
+                WriteLogEventData(diagnosticSource, logEvent, eventName);
             }
         }
 
-        private object CreateEventData(LogEventInfo logEvent)
+        private void WriteLogEventData(DiagnosticSource diagnosticSource, LogEventInfo logEvent, string eventName)
         {
             var message = RenderLogEvent(Layout, logEvent);
             IDictionary<string, object> properties = null;
@@ -70,17 +69,23 @@ namespace NLog.Targets
             if (logEvent.Exception != null)
             {
                 if (properties != null)
-                    return new { Message = message, Level = levelName, Exception = logEvent.Exception, Properties = properties };
+                    WriteToDiagnosticSource(diagnosticSource, eventName, new { Message = message, Level = levelName, Exception = logEvent.Exception, Properties = properties });
                 else
-                    return new { Message = message, Level = levelName, Exception = logEvent.Exception };
+                    WriteToDiagnosticSource(diagnosticSource, eventName, new { Message = message, Level = levelName, Exception = logEvent.Exception });
             }
             else
             {
                 if (properties != null)
-                    return new { Message = message, Level = levelName, Properties = properties };
+                    WriteToDiagnosticSource(diagnosticSource, eventName, new { Message = message, Level = levelName, Properties = properties });
                 else
-                    return new { Message = message, Level = levelName };
+                    WriteToDiagnosticSource(diagnosticSource, eventName, new { Message = message, Level = levelName });
             }
+        }
+
+        [System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage("Trimming - Suppress RequiresUnreferencedCode - Object being written to DiagnosticSource cannot be discovered statically", "IL2026")]
+        private static void WriteToDiagnosticSource<T>(DiagnosticSource diagnosticSource, string eventName, T eventData) where T : class
+        {
+            diagnosticSource.Write(eventName, eventData);
         }
 
         private DiagnosticSource LookupDiagnosticSource(string sourceName)
