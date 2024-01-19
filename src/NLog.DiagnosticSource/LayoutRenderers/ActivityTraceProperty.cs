@@ -73,5 +73,13 @@
         /// Duration of the operation (formatted as TimeSpan.TotalMilliseconds)
         /// </summary>
         DurationMs,
+        /// <summary>
+        /// Explicit assigned Activity DisplayName (with fallback to OperationName)
+        /// </summary>
+        DisplayName,
+        /// <summary>
+        /// Holds the W3C 'tracestate' header as a string. See also <see cref="System.Diagnostics.Activity.TraceStateString"/>
+        /// </summary>
+        TraceStateString,
     }
 }

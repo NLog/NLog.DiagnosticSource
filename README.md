@@ -57,6 +57,7 @@ Example of `NLog.config` file that outputs span-details together with LogEvent b
 - ParentId : Identifier for the parent activity
 - TraceId : Identifier for the root activity (Request Trace Identifier)
 - OperationName : Operation name of the current activity
+- DisplayName : Explicit assigned Activity DisplayName (with fallback to OperationName)
 - StartTimeUtc : Time when the operation started
 - Duration : Duration of the operation (formatted as TimeSpan)
 - DurationMs : Duration of the operation (formatted as TimeSpan.TotalMilliseconds)
@@ -69,6 +70,7 @@ Example of `NLog.config` file that outputs span-details together with LogEvent b
 - SourceName : Name of the activity source associated with this activity
 - SourceVersion : Version of the activity source associated with this activity
 - ActivityKind : Relationship kind between the activity, its parents, and its children. Can be combined with `format="d"`
+- TraceStateString : W3C 'tracestate' header as a string
 
 **Formatting**
 - Format: Format for rendering the property.
