@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using NLog.Config;
-using NLog.Extensions.Logging;
 
 namespace NLog.LayoutRenderers
 {

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace NLog.Extensions.Logging
+namespace NLog.LayoutRenderers
 {
     /// <summary>
     /// Helpers for getting the right values from Activity no matter the format (w3c or hierarchical)
