@@ -68,14 +68,14 @@ namespace NLog.Targets
 
             if (logEvent.Exception != null)
             {
-                if (properties != null)
+                if (properties?.Count > 0)
                     WriteToDiagnosticSource(diagnosticSource, eventName, new { Message = message, Level = levelName, Exception = logEvent.Exception, Properties = properties });
                 else
                     WriteToDiagnosticSource(diagnosticSource, eventName, new { Message = message, Level = levelName, Exception = logEvent.Exception });
             }
             else
             {
-                if (properties != null)
+                if (properties?.Count > 0)
                     WriteToDiagnosticSource(diagnosticSource, eventName, new { Message = message, Level = levelName, Properties = properties });
                 else
                     WriteToDiagnosticSource(diagnosticSource, eventName, new { Message = message, Level = levelName });
@@ -83,7 +83,7 @@ namespace NLog.Targets
         }
 
         [System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage("Trimming - Suppress RequiresUnreferencedCode - Object being written to DiagnosticSource cannot be discovered statically", "IL2026")]
-        private static void WriteToDiagnosticSource<T>(DiagnosticSource diagnosticSource, string eventName, T eventData) where T : class
+        private static void WriteToDiagnosticSource<[System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)] T>(DiagnosticSource diagnosticSource, string eventName, T eventData) where T : class
         {
             diagnosticSource.Write(eventName, eventData);
         }
