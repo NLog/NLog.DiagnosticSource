@@ -175,6 +175,7 @@ namespace NLog.LayoutRenderers
                 case ActivityTraceProperty.SpanId: return activity.GetSpanId();
                 case ActivityTraceProperty.TraceId: return activity.GetTraceId();
                 case ActivityTraceProperty.OperationName: return activity.OperationName;
+                case ActivityTraceProperty.DisplayName: return activity.DisplayName;
                 case ActivityTraceProperty.StartTimeUtc: return activity.StartTimeUtc > DateTime.MinValue ? activity.StartTimeUtc.ToString(Format, Culture) : string.Empty;
                 case ActivityTraceProperty.Duration: return GetDuration(activity);
                 case ActivityTraceProperty.ParentId: return activity.GetParentId();
@@ -186,6 +187,7 @@ namespace NLog.LayoutRenderers
                 case ActivityTraceProperty.SourceName: return activity.Source?.Name;
                 case ActivityTraceProperty.SourceVersion: return activity.Source?.Version;
                 case ActivityTraceProperty.ActivityKind: return ConvertToString(activity.Kind, Format);
+                case ActivityTraceProperty.TraceStateString: return activity.TraceStateString;
                 default: return string.Empty;
             }
         }
