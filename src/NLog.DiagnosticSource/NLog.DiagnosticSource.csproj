@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net8.0;net6.0;net462;netstandard2.0</TargetFrameworks>
     <RootNamespace>NLog</RootNamespace>
-    <VersionPrefix>5.2.0</VersionPrefix>
+    <VersionPrefix>5.2.1</VersionPrefix>
     <VersionSuffix></VersionSuffix>
 
     <AssemblyVersion>5.0.0.0</AssemblyVersion>
@@ -25,8 +25,7 @@
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
-- Updated to NLog v5.2.2
-- Updated nuget-package with README.md
+- Added NET8 as target-platform
 
 See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activity} and DiagnosticListenerTarget
     </PackageReleaseNotes>
