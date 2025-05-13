@@ -81,5 +81,13 @@
         /// Holds the W3C 'tracestate' header as a string. See also <see cref="System.Diagnostics.Activity.TraceStateString"/>
         /// </summary>
         TraceStateString,
+        /// <summary>
+        /// Status code of the current activity (formatted as Enum name by default). Can be combined with Format="d"
+        /// </summary>
+        Status,
+        /// <summary>
+        /// Status description of the current activity
+        /// </summary>
+        StatusDescription,
     }
 }

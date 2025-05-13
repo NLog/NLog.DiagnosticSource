@@ -188,6 +188,8 @@ namespace NLog.LayoutRenderers
                 case ActivityTraceProperty.SourceVersion: return activity.Source?.Version;
                 case ActivityTraceProperty.ActivityKind: return ConvertToString(activity.Kind, Format);
                 case ActivityTraceProperty.TraceStateString: return activity.TraceStateString;
+                case ActivityTraceProperty.Status: return ConvertToString(activity.Status, Format);
+                case ActivityTraceProperty.StatusDescription: return activity.StatusDescription ?? string.Empty;
                 default: return string.Empty;
             }
         }
@@ -393,6 +395,31 @@ namespace NLog.LayoutRenderers
             }
 
             return activityKind.ToString(format);
+        }
+
+        private string ConvertToString(System.Diagnostics.ActivityStatusCode statusCode, string format)
+        {
+            if (string.IsNullOrEmpty(format))
+            {
+                switch (statusCode)
+                {
+                    case System.Diagnostics.ActivityStatusCode.Unset: return string.Empty;   // unassigned so not interesting
+                    case System.Diagnostics.ActivityStatusCode.Ok: return nameof(System.Diagnostics.ActivityStatusCode.Ok);
+                    case System.Diagnostics.ActivityStatusCode.Error: return nameof(System.Diagnostics.ActivityStatusCode.Error);
+                    default: return statusCode.ToString();
+                }
+            }
+            else if (FormatEnumAsInteger(format))
+            {
+                switch (statusCode)
+                {
+                    case System.Diagnostics.ActivityStatusCode.Unset: return "0";
+                    case System.Diagnostics.ActivityStatusCode.Ok: return "1";
+                    case System.Diagnostics.ActivityStatusCode.Error: return "2";
+                }
+            }
+
+            return statusCode.ToString(format);
         }
 
         private static string ConvertToString(object objectValue)
