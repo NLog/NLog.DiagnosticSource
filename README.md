@@ -71,6 +71,8 @@ Example of `NLog.config` file that outputs span-details together with LogEvent b
 - SourceVersion : Version of the activity source associated with this activity
 - ActivityKind : Relationship kind between the activity, its parents, and its children. Can be combined with `format="d"`
 - TraceStateString : W3C 'tracestate' header as a string
+- Status : Status code of the current activity (formatted as Enum name by default). Can be combined with `format="d"`
+- StatusDescription : Status description of the current activity
 
 **Formatting**
 - Format: Format for rendering the property.
