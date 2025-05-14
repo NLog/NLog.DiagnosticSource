@@ -7,8 +7,8 @@ namespace NLog.LayoutRenderers
     /// </summary>
     internal static class ActivityExtensions
     {
-        private static readonly System.Diagnostics.ActivitySpanId EmptySpanId = default(System.Diagnostics.ActivitySpanId);
-        private static readonly System.Diagnostics.ActivityTraceId EmptyTraceId = default(System.Diagnostics.ActivityTraceId);
+        private static readonly string EmptySpanIdToHexString = default(System.Diagnostics.ActivitySpanId).ToHexString();
+        private static readonly string EmptyTraceIdToHexString = default(System.Diagnostics.ActivityTraceId).ToHexString();
 
         public static string GetSpanId(this Activity activity)
         {
@@ -33,18 +33,20 @@ namespace NLog.LayoutRenderers
 
         private static string SpanIdToHexString(ActivitySpanId spanId)
         {
-            if (EmptySpanId.Equals(spanId))
+            var spanIdString = spanId.ToHexString();
+            if (ReferenceEquals(EmptySpanIdToHexString, spanIdString))
                 return string.Empty;
             else
-                return spanId.ToHexString();
+                return spanIdString;
         }
 
         private static string TraceIdToHexString(ActivityTraceId traceId)
         {
-            if (EmptyTraceId.Equals(traceId))
+            var traceIdString = traceId.ToHexString();
+            if (ReferenceEquals(EmptyTraceIdToHexString, traceIdString))
                 return string.Empty;
             else
-                return traceId.ToHexString();
+                return traceIdString;
         }
     }
 }
