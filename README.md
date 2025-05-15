@@ -66,12 +66,12 @@ Example of `NLog.config` file that outputs span-details together with LogEvent b
 - CustomProperty : Custom property assigned to this activity. Must be used together with Item-option
 - Events : Events attached to this activity (Use `Format="@"` for json-array)
 - TraceState : W3C tracestate header
-- TraceFlags : See System.Diagnostics.ActivityTraceFlags for activity (defined by the W3C ID specification). Can be combined with `format="d"`
+- TraceFlags : See System.Diagnostics.ActivityTraceFlags for activity (defined by the W3C ID specification). For int-value combine with `format="d"`
 - SourceName : Name of the activity source associated with this activity
 - SourceVersion : Version of the activity source associated with this activity
-- ActivityKind : Relationship kind between the activity, its parents, and its children. Can be combined with `format="d"`
+- ActivityKind : Relationship kind between the activity, its parents, and its children. For int-value combine with `format="d"`
 - TraceStateString : W3C 'tracestate' header as a string
-- Status : Status code of the current activity (formatted as Enum name by default). Can be combined with `format="d"`
+- Status : Status code of the current activity (`Ok` or `Error`). For int-value combine with `format="d"` 
 - StatusDescription : Status description of the current activity
 
 **Formatting**
