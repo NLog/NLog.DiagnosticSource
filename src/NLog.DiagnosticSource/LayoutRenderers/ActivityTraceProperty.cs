@@ -89,5 +89,9 @@
         /// Status description of the current activity
         /// </summary>
         StatusDescription,
+        /// <summary>
+        /// Whether the activity span is sampled / recorded, and should be populated with propagation info and other details.
+        /// </summary>
+        IsAllDataRequested,
     }
 }
