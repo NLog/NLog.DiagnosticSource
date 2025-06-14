@@ -52,6 +52,7 @@ namespace NLog.DiagnosticSource.Tests
         [InlineData(ActivityTraceProperty.ActivityKind, true)]
         [InlineData(ActivityTraceProperty.Status, true)]
         [InlineData(ActivityTraceProperty.StatusDescription, true)]
+        [InlineData(ActivityTraceProperty.IsAllDataRequested, false)]
         public void TestAllPropertiesWhenActivityEmpty(ActivityTraceProperty property, bool empty)
         {
             bool orgThrowExceptions = LogManager.ThrowExceptions;
@@ -106,6 +107,7 @@ namespace NLog.DiagnosticSource.Tests
         [InlineData(ActivityTraceProperty.Status, "D", "0")]
         [InlineData(ActivityTraceProperty.Status, "X", "00000000")]
         [InlineData(ActivityTraceProperty.StatusDescription, null, "")]
+        [InlineData(ActivityTraceProperty.IsAllDataRequested, null, "1")]
         public void TestAllPropertiesWhenActivityRunning(ActivityTraceProperty property, string format, string output)
         {
             bool orgThrowExceptions = LogManager.ThrowExceptions;

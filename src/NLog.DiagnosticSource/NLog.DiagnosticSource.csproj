@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net8.0;net6.0;net462;netstandard2.0</TargetFrameworks>
     <RootNamespace>NLog</RootNamespace>
-    <VersionPrefix>5.2.2</VersionPrefix>
+    <VersionPrefix>5.2.3</VersionPrefix>
     <VersionSuffix></VersionSuffix>
 
     <AssemblyVersion>5.0.0.0</AssemblyVersion>
@@ -25,9 +25,7 @@
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
-- Added support for property Status (Ok / Error) (@banko6)
-- Added support for property StatusDescription (@banko6)
-- Translate default TraceId / SpanId to empty string (@snakefoot)
+- Added support for property IsAllDataRequested (@snakefoot)
 
 See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activity} and DiagnosticListenerTarget
     </PackageReleaseNotes>

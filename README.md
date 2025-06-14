@@ -73,6 +73,7 @@ Example of `NLog.config` file that outputs span-details together with LogEvent b
 - TraceStateString : W3C 'tracestate' header as a string
 - Status : Status code of the current activity (`Ok` or `Error`). For int-value combine with `format="d"` 
 - StatusDescription : Status description of the current activity
+- IsAllDataRequested : Activity span has been marked to be sampled / recorded (`0` or `1`)
 
 **Formatting**
 - Format: Format for rendering the property.
