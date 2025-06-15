@@ -190,6 +190,7 @@ namespace NLog.LayoutRenderers
                 case ActivityTraceProperty.TraceStateString: return activity.TraceStateString;
                 case ActivityTraceProperty.Status: return ConvertToString(activity.Status, Format);
                 case ActivityTraceProperty.StatusDescription: return activity.StatusDescription ?? string.Empty;
+                case ActivityTraceProperty.IsAllDataRequested: return activity.IsAllDataRequested ? "1" : "0";
                 default: return string.Empty;
             }
         }
