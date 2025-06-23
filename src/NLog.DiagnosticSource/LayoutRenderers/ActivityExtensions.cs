@@ -10,21 +10,21 @@ namespace NLog.LayoutRenderers
         private static readonly string EmptySpanIdToHexString = default(System.Diagnostics.ActivitySpanId).ToHexString();
         private static readonly string EmptyTraceIdToHexString = default(System.Diagnostics.ActivityTraceId).ToHexString();
 
-        public static string GetSpanId(this Activity activity)
+        public static string? GetSpanId(this Activity activity)
         {
             return activity.IdFormat == ActivityIdFormat.W3C ?
                 SpanIdToHexString(activity.SpanId) :
                 activity.Id;
         }
 
-        public static string GetTraceId(this Activity activity)
+        public static string? GetTraceId(this Activity activity)
         {
             return activity.IdFormat == ActivityIdFormat.W3C ?
                 TraceIdToHexString(activity.TraceId) : 
                 activity.RootId;
         }
 
-        public static string GetParentId(this Activity activity)
+        public static string? GetParentId(this Activity activity)
         {
             return activity.IdFormat == ActivityIdFormat.W3C ?
                 SpanIdToHexString(activity.ParentSpanId) :
