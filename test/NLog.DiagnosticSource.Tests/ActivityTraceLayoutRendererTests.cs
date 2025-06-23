@@ -143,15 +143,14 @@ namespace NLog.DiagnosticSource.Tests
         public void TestDurationSingleItem(string inputLayout, string expectedResult)
         {
             var logFactory = new LogFactory();
-            var xmlStream = new System.IO.StringReader($@"<nlog throwConfigExceptions='true'>
+            var xmlConfig = $@"<nlog throwConfigExceptions='true'>
                 <targets>
                     <target name='Memory' type='Memory' layout='{inputLayout}' />
                 </targets>
                 <rules>
                     <logger name='*' writeTo='Memory' />
-                </rules></nlog>");
-            var xmlReader = System.Xml.XmlReader.Create(xmlStream);
-            var logConfig = new NLog.Config.XmlLoggingConfiguration(xmlReader, null);
+                </rules></nlog>";
+            var logConfig = NLog.Config.XmlLoggingConfiguration.CreateFromXmlString(xmlConfig);
             logFactory.Configuration = logConfig;
             var memTarget = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("Memory");
             

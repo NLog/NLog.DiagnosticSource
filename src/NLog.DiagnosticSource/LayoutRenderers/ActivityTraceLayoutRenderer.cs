@@ -11,7 +11,7 @@ namespace NLog.LayoutRenderers
     [LayoutRenderer("activity")]
     public sealed class ActivityTraceLayoutRenderer : LayoutRenderer
     {
-        private static string[] DurationMsFormat = null;
+        private static string[]? DurationMsFormat = null;
 
         /// <summary>
         /// Gets or sets the property to retrieve.
@@ -22,12 +22,12 @@ namespace NLog.LayoutRenderers
         /// <summary>
         /// Single item to extract from <see cref="System.Diagnostics.Activity.Baggage"/> or <see cref="System.Diagnostics.Activity.Tags"/> or with <see cref="System.Diagnostics.Activity.GetCustomProperty(string)"/>
         /// </summary>
-        public string Item { get; set; }
+        public string? Item { get; set; }
 
         /// <summary>
         /// Control output formating of selected property (if supported)
         /// </summary>
-        public string Format { get; set; }
+        public string? Format { get; set; }
 
         /// <summary>
         /// Gets or sets the culture used for rendering.
@@ -167,7 +167,7 @@ namespace NLog.LayoutRenderers
             }
         }
 
-        private string GetValue(System.Diagnostics.Activity activity)
+        private string? GetValue(System.Diagnostics.Activity activity)
         {
             switch (Property)
             {
@@ -183,7 +183,7 @@ namespace NLog.LayoutRenderers
                 case ActivityTraceProperty.TraceFlags: return ConvertToString(activity.ActivityTraceFlags, Format);
                 case ActivityTraceProperty.Baggage: return GetCollectionItem(Item, activity.Baggage);
                 case ActivityTraceProperty.Tags: return GetCollectionItem(Item, activity.TagObjects);
-                case ActivityTraceProperty.CustomProperty: return string.IsNullOrEmpty(Item) ? string.Empty : (activity.GetCustomProperty(Item)?.ToString() ?? activity.Parent?.GetCustomProperty(Item)?.ToString() ?? string.Empty);
+                case ActivityTraceProperty.CustomProperty: return GetCustomProperty(Item, activity);
                 case ActivityTraceProperty.SourceName: return activity.Source?.Name;
                 case ActivityTraceProperty.SourceVersion: return activity.Source?.Version;
                 case ActivityTraceProperty.ActivityKind: return ConvertToString(activity.Kind, Format);
@@ -193,6 +193,14 @@ namespace NLog.LayoutRenderers
                 case ActivityTraceProperty.IsAllDataRequested: return activity.IsAllDataRequested ? "1" : "0";
                 default: return string.Empty;
             }
+        }
+
+        private static string GetCustomProperty(string? item, System.Diagnostics.Activity activity)
+        {
+            if (item is null || string.IsNullOrEmpty(item))
+                return string.Empty;
+
+            return activity.GetCustomProperty(item)?.ToString() ?? activity.Parent?.GetCustomProperty(item)?.ToString() ?? string.Empty;
         }
 
         private string GetDuration(System.Diagnostics.Activity activity)
@@ -234,7 +242,7 @@ namespace NLog.LayoutRenderers
             return default(TimeSpan?);
         }
 
-        private static string GetCollectionItem<T>(string item, IEnumerable<KeyValuePair<string, T>> collection) where T : class
+        private static string GetCollectionItem<T>(string? item, IEnumerable<KeyValuePair<string, T?>> collection) where T : class
         {
             if (collection is ICollection<KeyValuePair<string, T>> emptyCollection && emptyCollection.Count == 0)
                 return string.Empty; // Skip allocation of enumerator
@@ -243,14 +251,14 @@ namespace NLog.LayoutRenderers
             {
                 if (string.CompareOrdinal(keyValue.Key, item)==0)
                 {
-                    return ConvertToString(keyValue.Value);
+                    return ConvertToString(keyValue.Value) ?? string.Empty;
                 }
             }
 
             return string.Empty;    // Not found
         }
 
-        private static void RenderStringDictionaryFlat<T>(IEnumerable<KeyValuePair<string, T>> collection, StringBuilder builder) where T : class
+        private static void RenderStringDictionaryFlat<T>(IEnumerable<KeyValuePair<string, T?>> collection, StringBuilder builder) where T : class
         {
             if (collection is ICollection<KeyValuePair<string, T>> emptyCollection && emptyCollection.Count == 0)
                 return; // Skip allocation of enumerator
@@ -263,16 +271,16 @@ namespace NLog.LayoutRenderers
                 firstItem = false;
                 builder.Append(keyValue.Key);
 
-                string stringValue = ConvertToString(keyValue.Value);
-                if (stringValue != null)
-                {
-                    builder.Append('=');
-                    builder.Append(stringValue);
-                }
+                var stringValue = ConvertToString(keyValue.Value);
+                if (stringValue is null)
+                    continue;
+
+                builder.Append('=');
+                builder.Append(stringValue);
             }
         }
 
-        private static void RenderStringDictionaryJson<T>(IEnumerable<KeyValuePair<string, T>> collection, StringBuilder builder, string dictionaryPrefix = "{ ") where T : class
+        private static void RenderStringDictionaryJson<T>(IEnumerable<KeyValuePair<string, T?>> collection, StringBuilder builder, string dictionaryPrefix = "{ ") where T : class
         {
             if (collection is ICollection<KeyValuePair<string, T>> emptyCollection && emptyCollection.Count == 0)
                 return; // Skip allocation of enumerator
@@ -291,8 +299,8 @@ namespace NLog.LayoutRenderers
                 builder.Append('"');
                 builder.Append(EscapeStringQuotes(keyValue.Key));
 
-                string stringValue = ConvertToString(keyValue.Value);
-                if (stringValue == null)
+                var stringValue = ConvertToString(keyValue.Value);
+                if (stringValue is null)
                     builder.Append("\": null");
                 else
                     builder.Append("\": \"").Append(EscapeStringQuotes(stringValue)).Append('"');
@@ -346,7 +354,7 @@ namespace NLog.LayoutRenderers
                 builder.Append(" ]");
         }
 
-        private string ConvertToString(System.Diagnostics.ActivityTraceFlags traceFlags, string format)
+        private string ConvertToString(System.Diagnostics.ActivityTraceFlags traceFlags, string? format)
         {
             if (string.IsNullOrEmpty(format))
             {
@@ -369,7 +377,7 @@ namespace NLog.LayoutRenderers
             return traceFlags.ToString(format);
         }
 
-        private static string ConvertToString(System.Diagnostics.ActivityKind activityKind, string format)
+        private static string ConvertToString(System.Diagnostics.ActivityKind activityKind, string? format)
         {
             if (string.IsNullOrEmpty(format))
             {
@@ -398,7 +406,7 @@ namespace NLog.LayoutRenderers
             return activityKind.ToString(format);
         }
 
-        private string ConvertToString(System.Diagnostics.ActivityStatusCode statusCode, string format)
+        private string ConvertToString(System.Diagnostics.ActivityStatusCode statusCode, string? format)
         {
             if (string.IsNullOrEmpty(format))
             {
@@ -423,11 +431,11 @@ namespace NLog.LayoutRenderers
             return statusCode.ToString(format);
         }
 
-        private static string ConvertToString(object objectValue)
+        private static string? ConvertToString(object? objectValue)
         {
             try
             {
-                if (objectValue == null)
+                if (objectValue is null)
                     return null;
 
                 return Convert.ToString(objectValue, System.Globalization.CultureInfo.InvariantCulture);
@@ -438,7 +446,7 @@ namespace NLog.LayoutRenderers
             }
         }
 
-        private static bool FormatEnumAsInteger(string format)
+        private static bool FormatEnumAsInteger(string? format)
         {
             return format?.Length == 1 && (format[0] == 'd' || format[0] == 'D');
         }

@@ -1,13 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net8.0;net6.0;net462;netstandard2.0</TargetFrameworks>
     <RootNamespace>NLog</RootNamespace>
-    <VersionPrefix>5.2.3</VersionPrefix>
+    <VersionPrefix>6.0.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
 
-    <AssemblyVersion>5.0.0.0</AssemblyVersion>
-    <!-- AssemblyVersion must be fixed on 5.0.0.0 -->
+    <AssemblyVersion>6.0.0.0</AssemblyVersion>
+    <!-- AssemblyVersion must be fixed on 6.0.0.0 -->
     <AppVeyorBuildNumber>$(APPVEYOR_BUILD_NUMBER)</AppVeyorBuildNumber>
     <AppVeyorBuildNumber Condition="'$(AppVeyorBuildNumber)' == ''">0</AppVeyorBuildNumber>
     <FileVersion>$(VersionPrefix).$(AppVeyorBuildNumber)</FileVersion>
@@ -25,16 +25,19 @@
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
-- Added support for property IsAllDataRequested (@snakefoot)
+- NLog v6 with AOT-build support.
 
 See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activity} and DiagnosticListenerTarget
     </PackageReleaseNotes>
 
     <IsPackable>true</IsPackable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
-    <IsTrimmable>true</IsTrimmable>
+    <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">true</IsTrimmable>
+    <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
+    <LangVersion Condition="'$(TargetFramework)'=='net462' Or '$(TargetFramework)'=='netstandard2.0'">9</LangVersion>
     
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>NLog.snk</AssemblyOriginatorKeyFile>
@@ -42,12 +45,12 @@ See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activit
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="5.2.2" />
+    <PackageReference Include="NLog" Version="6.0.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net462' Or '$(TargetFramework)'=='netstandard2.0'">
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="6.0.0" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

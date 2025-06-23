@@ -17,7 +17,7 @@ namespace NLog.Targets
         /// <summary>
         /// Source Name for <see cref="DiagnosticSource"/>
         /// </summary>
-        public Layout SourceName { get; set; }
+        public Layout SourceName { get; set; } = Layout.Empty;
 
         /// <summary>
         /// Event Name for <see cref="DiagnosticSource.Write(string, object)"/>
@@ -58,7 +58,7 @@ namespace NLog.Targets
         private void WriteLogEventData(DiagnosticSource diagnosticSource, LogEventInfo logEvent, string eventName)
         {
             var message = RenderLogEvent(Layout, logEvent);
-            IDictionary<string, object> properties = null;
+            IDictionary<string, object?>? properties = null;
             if (ShouldIncludeProperties(logEvent) || ContextProperties?.Count > 0)
             {
                 properties = GetAllProperties(logEvent);

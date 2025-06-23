@@ -13,7 +13,7 @@ NLog DiagnosticListenerTarget for [Microsoft DiagnosticSource](https://github.co
     `Install-Package NLog.DiagnosticSource` or in your csproj:
 
     ```xml
-    <PackageReference Include="NLog.DiagnosticSource" Version="5.*" />
+    <PackageReference Include="NLog.DiagnosticSource" Version="6.*" />
     ```
 
 2) Add to your nlog.config:
