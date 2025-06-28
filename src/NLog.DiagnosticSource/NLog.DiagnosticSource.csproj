@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net8.0;net6.0;net462;netstandard2.0</TargetFrameworks>
     <RootNamespace>NLog</RootNamespace>
-    <VersionPrefix>6.0.0</VersionPrefix>
+    <VersionPrefix>6.0.1</VersionPrefix>
     <VersionSuffix></VersionSuffix>
 
     <AssemblyVersion>6.0.0.0</AssemblyVersion>
@@ -25,7 +25,7 @@
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
-- NLog v6 with AOT-build support.
+- Updated NLog v6.0.1
 
 See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activity} and DiagnosticListenerTarget
     </PackageReleaseNotes>
@@ -45,7 +45,7 @@ See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activit
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="6.0.0" />
+    <PackageReference Include="NLog" Version="6.0.1" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
 
