@@ -20,7 +20,7 @@ namespace NLog.LayoutRenderers
         public static string? GetTraceId(this Activity activity)
         {
             return activity.IdFormat == ActivityIdFormat.W3C ?
-                TraceIdToHexString(activity.TraceId) : 
+                TraceIdToHexString(activity.TraceId) :
                 activity.RootId;
         }
 

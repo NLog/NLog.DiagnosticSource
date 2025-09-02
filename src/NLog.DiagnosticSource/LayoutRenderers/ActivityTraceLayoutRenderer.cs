@@ -235,7 +235,7 @@ namespace NLog.LayoutRenderers
                     if (duration < TimeSpan.Zero)
                         duration = TimeSpan.FromTicks(1);
                 }
-                
+
                 return duration;
             }
 
@@ -249,7 +249,7 @@ namespace NLog.LayoutRenderers
 
             foreach (var keyValue in collection)
             {
-                if (string.CompareOrdinal(keyValue.Key, item)==0)
+                if (string.CompareOrdinal(keyValue.Key, item) == 0)
                 {
                     return ConvertToString(keyValue.Value) ?? string.Empty;
                 }

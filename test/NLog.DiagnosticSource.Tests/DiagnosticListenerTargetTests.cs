@@ -47,7 +47,7 @@ namespace NLog.DiagnosticSource.Tests
 
             using (var observer = new Observer(nameof(DiagnosticSource_WriteException)))
             using (var subscription = DiagnosticListener.AllListeners.Subscribe(observer))
-            { 
+            {
                 // Act
                 logger.Error(new Exception("Boom!"), "Explosion");
 

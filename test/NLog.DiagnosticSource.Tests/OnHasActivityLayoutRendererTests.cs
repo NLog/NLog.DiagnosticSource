@@ -1,6 +1,4 @@
-﻿using System;
-using NLog;
-using NLog.Config;
+﻿using NLog.Config;
 using NLog.LayoutRenderers;
 using NLog.LayoutRenderers.Wrappers;
 using Xunit;

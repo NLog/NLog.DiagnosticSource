@@ -153,7 +153,7 @@ namespace NLog.DiagnosticSource.Tests
             var logConfig = NLog.Config.XmlLoggingConfiguration.CreateFromXmlString(xmlConfig);
             logFactory.Configuration = logConfig;
             var memTarget = logFactory.Configuration.FindTargetByName<NLog.Targets.MemoryTarget>("Memory");
-            
+
             var logger = logFactory.GetCurrentClassLogger();
             using (var newActivity = new System.Diagnostics.Activity("MyOperation").Start())
             {
