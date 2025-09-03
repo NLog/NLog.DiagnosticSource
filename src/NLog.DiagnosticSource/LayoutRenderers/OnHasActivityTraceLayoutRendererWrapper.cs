@@ -1,7 +1,6 @@
 ﻿namespace NLog.LayoutRenderers.Wrappers
 {
     using System.Text;
-    using NLog.Config;
 
     /// <summary>
     /// Only outputs the inner layout when <see cref="System.Diagnostics.Activity.Current"/> is active
