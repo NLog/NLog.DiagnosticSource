@@ -130,7 +130,7 @@ Example of `NLog.config` file that uses the `diagnosticListener` target:
 ```
 
 ### SpanId / TraceId in custom NLog Target
-NLog v5.3.4 introduced support for `Layout.FromMethod` that supports typed NLog `Layout<T>`. This allows custom NLog Targets to resolve SpanId / TraceId with support for AsyncWrapper, without having to parse from string or depend on `NLog.DiagnosticSource` nuget-package:
+NLog v5.3.4 introduced support for `Layout.FromMethod` that supports typed NLog `Layout<T>`. This allows [custom NLog Targets](https://github.com/NLog/NLog/wiki/How-to-write-a-custom-target-for-structured-logging) to resolve SpanId / TraceId with support for AsyncWrapper, without having to parse from string or depend on `NLog.DiagnosticSource` nuget-package:
 ```csharp
 public class MyCustomTarget : TargetWithContext
 {
@@ -153,6 +153,7 @@ public class MyCustomTarget : TargetWithContext
         }
 }
 ```
+
 
 
 
