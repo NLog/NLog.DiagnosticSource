@@ -130,7 +130,7 @@ Example of `NLog.config` file that uses the `diagnosticListener` target:
 ```
 
 ### SpanId / TraceId in custom NLog Target
-NLog v5.3.4 introduced support for `Layout.FromMethod` that returns typed NLog Layout. This allows custom NLog Targets to resolve SpanId / TraceId without needing to parse from string:
+NLog v5.3.4 introduced support for `Layout.FromMethod` that returns typed NLog `Layout<T>`. This allows custom NLog Targets to resolve SpanId / TraceId without have to parse from string:
 ```csharp
 public class MyCustomTarget : TargetWithContext
 {
@@ -153,4 +153,5 @@ public class MyCustomTarget : TargetWithContext
         }
 }
 ```
+
 
