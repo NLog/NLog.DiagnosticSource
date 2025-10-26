@@ -128,3 +128,29 @@ Example of `NLog.config` file that uses the `diagnosticListener` target:
 </rules>
 </nlog>
 ```
+
+### SpanId / TraceId in custom NLog Target
+NLog v5.3.4 introduced support for `Layout.FromMethod` that returns typed NLog Layout. This allows custom NLog Targets to resolve SpanId / TraceId without needing to parse from string:
+```csharp
+public class MyCustomTarget : TargetWithContext
+{
+        private static readonly string EmptyTraceIdToHexString = default(System.Diagnostics.ActivityTraceId).ToHexString();
+        private static readonly string EmptySpanIdToHexString = default(System.Diagnostics.ActivitySpanId).ToHexString();
+
+        public Layout<System.Diagnostics.ActivityTraceId?> TraceId { get; set; } = Layout<System.Diagnostics.ActivityTraceId?>.FromMethod(static evt => System.Diagnostics.Activity.Current?.TraceId is System.Diagnostics.ActivityTraceId activityTraceId && !ReferenceEquals(EmptyTraceIdToHexString, activityTraceId.ToHexString()) ? activityTraceId : null);
+
+        public Layout<System.Diagnostics.ActivitySpanId?> SpanId { get; set; } = Layout<System.Diagnostics.ActivitySpanId?>.FromMethod(static evt => System.Diagnostics.Activity.Current?.SpanId is System.Diagnostics.ActivitySpanId activitySpanId && !ReferenceEquals(EmptySpanIdToHexString, activitySpanId.ToHexString()) ? activitySpanId : null);
+}
+
+        protected override void Write(LogEventInfo logEvent)
+        {
+            var spanId = RenderLogEvent(SpanId, logEvent);
+            if (spanId.HasValue)
+                data.SpanId = spanId.Value;
+
+            var traceId = RenderLogEvent(TraceId, logEvent);
+            if (traceId.HasValue)
+                data.TraceId = traceId.Value;
+        }
+}
+```
