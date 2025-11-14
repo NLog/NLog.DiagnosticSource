@@ -6,10 +6,15 @@ skip_tags: true
 skip_branch_with_pr: true
 nuget:
   disable_publish_on_pr: true
+install:
+- ps: |
+    Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing -OutFile "$env:temp\dotnet-install.ps1"
+    & $env:temp\dotnet-install.ps1 -Architecture x64 -Version '10.0.100' -InstallDir "$env:ProgramFiles\dotnet"
 build_script:
-- ps: msbuild /t:restore,pack /p:Configuration=Release /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /p:ContinuousIntegrationBuild=true /p:EmbedUntrackedSources=true /p:PublishRepositoryUrl=true /verbosity:minimal
+- ps: dotnet --version
+- ps: dotnet pack /p:Configuration=Release /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /maxcpucount /p:ContinuousIntegrationBuild=true /p:EmbedUntrackedSources=true /verbosity:minimal
 test_script:
-- ps: dotnet test test\NLog.DiagnosticSource.Tests\NLog.DiagnosticSource.Tests.csproj
+- ps: dotnet test /p:Configuration=Release test/NLog.DiagnosticSource.Tests\NLog.DiagnosticSource.Tests.csproj
 artifacts:
   - path: '**\NLog.*.nupkg'
   - path: '**\NLog.*.snupkg'
@@ -19,4 +24,7 @@ deploy:
     secure: f6oWebyOFLpuuo2PMd6xgoxwMq+JvXVUmPyBme89zS7UF0zcvLYPSKN/p6B/KaMs
   on:
     branch: master
-
+environment:
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+    DOTNET_CLI_TELEMETRY_OPTOUT: true
+    DOTNET_NOLOGO: true

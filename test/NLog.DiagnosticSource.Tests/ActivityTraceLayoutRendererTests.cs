@@ -6,6 +6,15 @@ namespace NLog.DiagnosticSource.Tests
 {
     public class ActivityTraceLayoutRendererTests
     {
+        public ActivityTraceLayoutRendererTests()
+        {
+            System.Diagnostics.Activity.Current = null;
+            NLog.LogManager.Setup().SetupExtensions(ext => {
+                ext.RegisterLayoutRenderer<ActivityTraceLayoutRenderer>("activity");
+            });
+            NLog.LogManager.ThrowExceptions = true;
+        }
+
         [Fact]
         public void TestAllPropertiesWhenActivityNull()
         {

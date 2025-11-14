@@ -7,13 +7,22 @@ namespace NLog.DiagnosticSource.Tests
 {
     public class OnHasActivityLayoutRendererTests
     {
+        public OnHasActivityLayoutRendererTests()
+        {
+            System.Diagnostics.Activity.Current = null;
+            NLog.LogManager.Setup().SetupExtensions(ext => {
+                ext.RegisterLayoutRenderer<ActivityTraceLayoutRenderer>("activity");
+                ext.RegisterLayoutRenderer<OnHasActivityTraceLayoutRendererWrapper>("onhasactivity");
+            });
+            NLog.LogManager.ThrowExceptions = true;
+        }
+
         [Fact]
         public void OnHasActivityNotActive()
         {
             // Arrange
             System.Diagnostics.Activity.Current = null;
-            LayoutRenderer.Register("activity", typeof(ActivityTraceLayoutRenderer));
-            LayoutRenderer.Register("onhasactivity", typeof(OnHasActivityTraceLayoutRendererWrapper));
+
             var logFactory = new LogFactory();
             var logConfig = new LoggingConfiguration(logFactory);
             var memTarget = new NLog.Targets.MemoryTarget("memory");
@@ -36,8 +45,7 @@ namespace NLog.DiagnosticSource.Tests
         {
             // Arrange
             System.Diagnostics.Activity.Current = null;
-            LayoutRenderer.Register("activity", typeof(ActivityTraceLayoutRenderer));
-            LayoutRenderer.Register("onhasactivity", typeof(OnHasActivityTraceLayoutRendererWrapper));
+
             var logFactory = new LogFactory();
             var logConfig = new LoggingConfiguration(logFactory);
             var memTarget = new NLog.Targets.MemoryTarget("memory");
