@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net6.0;net462;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net10.0;net8.0;net6.0;net462;netstandard2.0</TargetFrameworks>
     <RootNamespace>NLog</RootNamespace>
-    <VersionPrefix>6.0.2</VersionPrefix>
+    <VersionPrefix>6.0.3</VersionPrefix>
     <VersionSuffix></VersionSuffix>
 
     <AssemblyVersion>6.0.0.0</AssemblyVersion>
@@ -16,7 +16,7 @@
     <Company>NLog</Company>
     <Authors>NLog</Authors>
     <Copyright>NLog</Copyright>
-    <Description>NLog Integration for Microsoft System.Diagnostics.DiagnosticSource and Activity Trace</Description>
+    <Description>NLog Integration for Microsoft System.Diagnostics.DiagnosticSource and Activity TraceId / SpanId</Description>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/NLog/NLog.DiagnosticSource.git</RepositoryUrl>
     <PackageTags>DiagnosticSource;NLog;logging;log</PackageTags>
@@ -25,7 +25,8 @@
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
-- Updated NLog v6.0.2
+- Added NET10 targetframework
+- Updated NLog v6.0.3
 
 See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activity} and DiagnosticListenerTarget
     </PackageReleaseNotes>
@@ -45,7 +46,7 @@ See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activit
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="6.0.2" />
+    <PackageReference Include="NLog" Version="6.0.3" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
 

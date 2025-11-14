@@ -10,6 +10,14 @@ namespace NLog.DiagnosticSource.Tests
 {
     public class DiagnosticListenerTargetTests
     {
+        public DiagnosticListenerTargetTests()
+        {
+            NLog.LogManager.Setup().SetupExtensions(ext => {
+                ext.RegisterTarget<DiagnosticListenerTarget>("DiagnosticListener");
+            });
+            NLog.LogManager.ThrowExceptions = true;
+        }
+
         [Fact]
         public void DiagnosticSource_WriteMessage()
         {
