@@ -221,7 +221,7 @@ namespace NLog.LayoutRenderers
                 return default(double?);
         }
 
-        private TimeSpan? GetDurationTimeSpan(System.Diagnostics.Activity activity)
+        private static TimeSpan? GetDurationTimeSpan(System.Diagnostics.Activity activity)
         {
             var startTimeUtc = activity.StartTimeUtc;
             if (startTimeUtc > DateTime.MinValue)

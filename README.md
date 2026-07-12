@@ -1,7 +1,9 @@
 # NLog.DiagnosticSource
-NLog ActivityTraceLayoutRenderer for [Microsoft Activity Trace](https://github.com/dotnet/runtime/blob/main/src/libraries/System.Diagnostics.DiagnosticSource/src/ActivityUserGuide.md)
+NLog.DiagnosticSource extends NLog with support for System.Diagnostics.Activity and DiagnosticSource.
 
-NLog DiagnosticListenerTarget for [Microsoft DiagnosticSource](https://github.com/dotnet/runtime/blob/main/src/libraries/System.Diagnostics.DiagnosticSource/src/DiagnosticSourceUsersGuide.md)
+- `${activity}` - NLog ActivityTraceLayoutRenderer for [Microsoft Activity Trace](https://github.com/dotnet/runtime/blob/main/src/libraries/System.Diagnostics.DiagnosticSource/src/ActivityUserGuide.md)
+
+- `DiagnosticListener` - NLog DiagnosticListenerTarget for [Microsoft DiagnosticSource](https://github.com/dotnet/runtime/blob/main/src/libraries/System.Diagnostics.DiagnosticSource/src/DiagnosticSourceUsersGuide.md)
 
 [![Version](https://badge.fury.io/nu/NLog.DiagnosticSource.svg)](https://www.nuget.org/packages/NLog.DiagnosticSource)
 [![AppVeyor](https://img.shields.io/appveyor/ci/nlog/NLog-DiagnosticSource/master.svg)](https://ci.appveyor.com/project/nlog/NLog-DiagnosticSource/branch/master)
@@ -33,9 +35,9 @@ NLog DiagnosticListenerTarget for [Microsoft DiagnosticSource](https://github.co
    ```
 
 ### How to use ActivityTraceLayoutRenderer
-The `System.Diagnostics.Activity.Current` from Microsoft allows one to create OpenTelemetry spans. 
+The `System.Diagnostics.Activity.Current` is the .NET abstraction used by OpenTelemetry for distributed tracing.
 
-Example of `NLog.config` file that outputs span-details together with LogEvent by using `${activity}`:
+Example of `NLog.config` file that outputs TraceId information together with each LogEvent by using `${activity}`:
 
 ```xml
 <nlog>
@@ -57,7 +59,7 @@ Example of `NLog.config` file that outputs span-details together with LogEvent b
 - ParentId : Identifier for the parent activity
 - TraceId : Identifier for the root activity (Request Trace Identifier)
 - OperationName : Operation name of the current activity
-- DisplayName : Explicit assigned Activity DisplayName (with fallback to OperationName)
+- DisplayName : Explicitly assigned activity display name (with fallback to OperationName)
 - StartTimeUtc : Time when the operation started
 - Duration : Duration of the operation (formatted as TimeSpan)
 - DurationMs : Duration of the operation (formatted as TimeSpan.TotalMilliseconds)
@@ -85,7 +87,7 @@ Example of `NLog.config` file that outputs span-details together with LogEvent b
 
 **Extract property values from parent or root**
 
-It is possible to specify that the above property should be extracted from either root- or parent-activity.
+You can also specify to extract the property from either the parent or the root activity.
 
 ```
 ${activity:property=OperationName:parent=true}
@@ -95,23 +97,10 @@ ${activity:property=OperationName:parent=true}
 ${activity:property=OperationName:root=true}
 ```
 
-**Manually configure ActivityTrackingOptions**
-
-When using the default HostBuilder then it will automatically setup the following [ActivityTrackingOptions](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.loggerfactoryoptions.activitytrackingoptions):
-```c#
-builder.ConfigureLogging((hostingContext, loggingBuilder) =>
-{
-      loggingBuilder.Configure(options =>
-      {
-            options.ActivityTrackingOptions = ActivityTrackingOptions.SpanId
-                                            | ActivityTrackingOptions.TraceId
-                                            | ActivityTrackingOptions.ParentId;
-      });
-}).
-```
-If creating a custom HostBuilder, then one have to manually setup the ActivityTrackingOptions like shown above.
-
 ### How to use DiagnosticListenerTarget
+
+DiagnosticListenerTarget publishes NLog events as DiagnosticSource events, allowing subscribers such as diagnostics tools,
+telemetry libraries, or custom listeners to observe log events without coupling directly to NLog.
 
 Example of `NLog.config` file that uses the `diagnosticListener` target:
 
@@ -127,6 +116,21 @@ Example of `NLog.config` file that uses the `diagnosticListener` target:
     <logger minLevel="Info" writeTo="diagSource" />
 </rules>
 </nlog>
+```
+
+### HostBuilder and ActivityTrackingOptions
+The `${activity}` layout renderer reads directly from `Activity.Current`. `Microsoft.Extensions.Logging` uses [ActivityTrackingOptions](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.loggerfactoryoptions.activitytrackingoptions)
+to control which activity details are included as logging scope properties:
+```c#
+builder.ConfigureLogging((hostingContext, loggingBuilder) =>
+{
+      loggingBuilder.Configure(options =>
+      {
+            options.ActivityTrackingOptions = ActivityTrackingOptions.SpanId
+                                            | ActivityTrackingOptions.TraceId
+                                            | ActivityTrackingOptions.ParentId;
+      });
+}).
 ```
 
 ### SpanId / TraceId in custom NLog Target
@@ -154,10 +158,7 @@ public class MyCustomTarget : TargetWithContext
 }
 ```
 
-
-
-
-
-
-
-
+W3C is the recommended format for distributed tracing and is the default on modern .NET versions.
+.NET Framework continues to default to hierarchical IDs unless configured otherwise.
+- System.Diagnostics.Activity.DefaultIdFormat = System.Diagnostics.ActivityIdFormat.W3C;
+- or by setting the environment variable DOTNET_SYSTEM_DIAGNOSTICS_ACTIVITY_DEFAULTIDFORMAT to W3C

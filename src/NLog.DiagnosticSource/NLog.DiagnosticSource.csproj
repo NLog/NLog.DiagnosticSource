@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net10.0;net8.0;net6.0;net462;netstandard2.0</TargetFrameworks>
     <RootNamespace>NLog</RootNamespace>
-    <VersionPrefix>6.0.3</VersionPrefix>
+    <VersionPrefix>6.1.4</VersionPrefix>
     <VersionSuffix></VersionSuffix>
 
     <AssemblyVersion>6.0.0.0</AssemblyVersion>
@@ -25,8 +25,7 @@
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
-- Added NET10 targetframework
-- Updated NLog v6.0.3
+- Updated NLog v6.1.4
 
 See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activity} and DiagnosticListenerTarget
     </PackageReleaseNotes>
@@ -46,7 +45,7 @@ See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activit
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="6.0.3" />
+    <PackageReference Include="NLog" Version="6.1.4" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
   </ItemGroup>
 
