@@ -19,7 +19,7 @@
     <Description>NLog Integration for Microsoft System.Diagnostics.DiagnosticSource and Activity TraceId / SpanId</Description>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/NLog/NLog.DiagnosticSource.git</RepositoryUrl>
-    <PackageTags>DiagnosticSource;NLog;logging;log</PackageTags>
+    <PackageTags>DiagnosticSource;NLog;Tracing;Logging;log</PackageTags>
     <PackageIcon>N.png</PackageIcon>
     <PackageProjectUrl>https://github.com/NLog/NLog.DiagnosticSource</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
