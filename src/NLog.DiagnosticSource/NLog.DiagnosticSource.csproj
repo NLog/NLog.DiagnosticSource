@@ -45,7 +45,7 @@ See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activit
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="6.1.4" />
+    <PackageReference Include="NLog" Version="6.2.1" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.400" PrivateAssets="All" />
   </ItemGroup>
 
