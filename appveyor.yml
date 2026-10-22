@@ -12,7 +12,7 @@ environment:
   DOTNET_NOLOGO: true
 build_script:
 - ps: dotnet --version
-- ps: dotnet pack /p:Configuration=Release /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /maxcpucount /p:ContinuousIntegrationBuild=true /p:EmbedUntrackedSources=true /verbosity:minimal
+- ps: dotnet pack /p:Configuration=Release /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /maxcpucount /p:ContinuousIntegrationBuild=true /p:EmbedUntrackedSources=true /p:PublishRepositoryUrl=true /verbosity:minimal
 test_script:
 - ps: dotnet test /p:Configuration=Release test/NLog.DiagnosticSource.Tests\NLog.DiagnosticSource.Tests.csproj
 artifacts:
