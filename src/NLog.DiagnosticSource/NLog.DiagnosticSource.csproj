@@ -35,6 +35,7 @@ See https://github.com/NLog/NLog.DiagnosticSource for documentation of ${activit
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <DisableImplicitFrameworkReferences Condition="'$(TargetFramework)'=='net462'">true</DisableImplicitFrameworkReferences>
     <IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">true</IsTrimmable>
     <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">true</IsAotCompatible>
     <LangVersion Condition="'$(TargetFramework)'=='net462' Or '$(TargetFramework)'=='netstandard2.0'">9</LangVersion>
