@@ -35,7 +35,7 @@ NLog.DiagnosticSource extends NLog with support for System.Diagnostics.Activity 
    ```
 
 ### How to use ActivityTraceLayoutRenderer
-The `System.Diagnostics.Activity.Current` is the .NET abstraction used by OpenTelemetry for distributed tracing.
+The `System.Diagnostics.Activity.Current` is the .NET abstraction used by OpenTelemetry for distributed tracing correlation.
 
 Example of `NLog.config` file that outputs TraceId information together with each LogEvent by using `${activity}`:
 
