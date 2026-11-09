@@ -6,7 +6,7 @@ NLog.DiagnosticSource extends NLog with support for System.Diagnostics.Activity 
 - `DiagnosticListener` - NLog DiagnosticListenerTarget for [Microsoft DiagnosticSource](https://github.com/dotnet/runtime/blob/main/src/libraries/System.Diagnostics.DiagnosticSource/src/DiagnosticSourceUsersGuide.md)
 
 [![Version](https://badge.fury.io/nu/NLog.DiagnosticSource.svg)](https://www.nuget.org/packages/NLog.DiagnosticSource)
-[![AppVeyor](https://img.shields.io/appveyor/ci/nlog/NLog-DiagnosticSource/master.svg)](https://ci.appveyor.com/project/nlog/NLog-DiagnosticSource/branch/master)
+[![Build](https://github.com/NLog/NLog.DiagnosticSource/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/NLog/NLog.DiagnosticSource/actions/workflows/ci.yml)
 
 ### How to install
 
