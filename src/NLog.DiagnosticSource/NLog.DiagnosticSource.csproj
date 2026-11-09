@@ -8,9 +8,7 @@
 
     <AssemblyVersion>6.0.0.0</AssemblyVersion>
     <!-- AssemblyVersion must be fixed on 6.0.0.0 -->
-    <AppVeyorBuildNumber>$(APPVEYOR_BUILD_NUMBER)</AppVeyorBuildNumber>
-    <AppVeyorBuildNumber Condition="'$(AppVeyorBuildNumber)' == ''">0</AppVeyorBuildNumber>
-    <FileVersion>$(VersionPrefix).$(AppVeyorBuildNumber)</FileVersion>
+    <FileVersion>$(VersionPrefix).0</FileVersion>
 
     <Title>NLog.DiagnosticSource</Title>
     <Company>NLog</Company>
